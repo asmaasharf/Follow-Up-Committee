@@ -1,0 +1,367 @@
+
+<link rel="stylesheet" href="/stylesheets/views/users/reports.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+<!--- dashboard--->
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>document</title>
+
+</head>
+<body class="body-main">
+    <div class="menu">
+        <ul>
+            <li class="profile">
+                <div class="img-box">
+                    <img src="/images/صورة للموقع 2.jfif" alt="">
+                </div>
+
+                <div class="user-info">
+                    <div class="short-name">{{user.username}}</div>
+
+                    <div class="full-name">{{user.fullname}}</div>
+
+                <p class="user-role">
+                        {{user.jobTitle}}
+                </p>
+                <a href="/users/change-password" class="change-password">
+    
+                        <span>تغيير كلمة المرور</span>
+                </a>
+
+                </div>
+            </li>
+
+          
+            <!---اول قائمة تحت اسم البروفايل--->
+       
+            {{#if isAdmin}}
+            <li>
+                <a href="/users/manage-users">
+                <i class="fa-solid fa-users"></i>
+                <p>إدارة المستخدمين</p>
+                </a>
+            </li>
+            {{/if}}
+             <!---- ثاني قائمه--->
+
+            <li>
+                <a href="/">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <p>إضافة مشكلة جديدة</p>
+                </a>
+            </li>
+
+
+             <!---- ثالث قائمه--->
+
+            <li>
+                <a href="/technicalNotes">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <p>توضيح نقاط فنية</p>
+                </a>
+            </li>
+            <!---- رابع قائمه--->
+
+            <li>
+                <a href="/inquiries">
+                    <i class="fa-solid fa-comments"></i>
+                    <p>الاستفسارات</p>
+                </a>
+            </li>
+
+            {{!-- خامس قائمة --}}
+
+            <li>
+                <a href="/reports">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <p>التقارير</p>
+                </a>
+            </li>
+             
+
+        
+             <!---- سادس قائمه--->
+
+            <li class="log-out">
+                 <a href="/users/logout">
+                    <i class="fas fa-sign-out"></i>
+                    <p>تسجيل خروج </p>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="title-info">
+            <p>لجنة متابعة اداء المراكز التكنولوجية بالمحافظة</p>
+            <i class="fas fa-chart-bar"></i>
+        </div>
+
+
+<div class="report-container">
+
+    <form action="/reports/view" method="GET" target="_blank">
+
+        <div class="form-group horizontal">
+
+            <label for="category">تصنيف التقارير</label>
+
+            <select id="category" class="form-control">
+
+                <option value="">-- اختر التصنيف --</option>
+
+                <option value="complaints">تقرير بالمشاكل المطروحه</option>
+
+                <option value="users">تقرير اعمال مستخدم</option>
+
+                {{#if isAdmin}}
+
+                <option value="follow-Up-Committee">
+                    تقرير اعمال اعضاء لجنة المتابعة
+                </option>
+
+                {{/if}}
+
+            </select>
+
+        </div>
+
+        <div class="form-group horizontal">
+
+            <label for="reportType">اسم التقرير</label>
+
+            <select
+                id="reportType"
+                name="reportType"
+                class="form-control"
+                disabled
+            >
+
+                <option value="">-- اختر التقرير --</option>
+                
+
+            </select>
+
+        </div>
+
+        {{!-- //  اختيار اسم المستخدم select --}}
+
+    <div class="form-group" id="userSelect" style="display:none;">
+
+    <label>اسم المستخدم</label>
+
+    <select name="userId" class="form-control">
+
+        <option value="">-- اختر المستخدم --</option>
+
+        {{#each users}}
+
+            <option value="{{_id}}">
+
+                {{username}}
+
+            </option>
+
+        {{/each}}
+
+    </select>
+
+</div>
+
+
+{{!-- فلترة التقرير من تاريخ   الي تاريخ    --}}
+
+<div class="form-group" id="dateFrom" style="display:none;">
+    <label>من تاريخ</label>
+
+    <input
+        type="text"
+        id="fromDateInput"
+        name="fromDate"
+        class="form-control"
+        placeholder="اختر التاريخ">
+</div>
+
+<div class="form-group" id="dateTo" style="display:none;">
+    <label>إلى تاريخ</label>
+
+    <input
+        type="text"
+        id="toDateInput"
+        name="toDate"
+        class="form-control"
+        placeholder="اختر التاريخ">
+</div>
+
+{{!-- // ظهور عضو لجنة المتابعة للاختيار من ال  select --}}
+<div class="form-group" id="adminSelect" style="display:none;">
+
+    <label>عضو لجنة المتابعة</label>
+
+    <select name="adminId" class="form-control">
+
+        <option value="">-- اختر عضو اللجنة --</option>
+
+        {{#each admins}}
+
+            <option value="{{_id}}">
+                {{username}}
+            </option>
+
+        {{/each}}
+
+    </select>
+
+</div>
+
+        <button type="submit" class="btn btn-primary">
+
+           عرض التقرير
+
+        </button>
+
+    </form>
+
+</div>
+
+
+
+<script>
+
+const category = document.getElementById("category");
+
+const reportType = document.getElementById("reportType");
+
+const userSelect = document.getElementById("userSelect");
+
+const dateFrom = document.getElementById("dateFrom");
+
+const dateTo = document.getElementById("dateTo");
+
+const adminSelect = document.getElementById("adminSelect");
+
+category.addEventListener("change", function () {
+
+    reportType.innerHTML = '<option value="">-- اختر التقرير --</option>';
+
+    reportType.disabled = false;
+
+    if (category.value === "complaints") {
+
+        reportType.innerHTML += `
+            <option value="allComplaints">
+                بيان عدد المشاكل المطروحه
+            </option>
+
+            <option value="repliedComplaints">
+                بيان بالمشاكل التي تم الرد عليها
+            </option>
+
+            <option value="notRepliedComplaints">
+                بيان بالمشاكل التي لم يتم الرد عليها
+            </option>
+
+            
+        `;
+
+    }
+
+    else if (category.value === "users") {
+
+        reportType.innerHTML += `
+            <option value="activeUsers">
+                بيان المستخدمين المعتمدين
+            </option>
+
+            <option value="pendingUsers">
+                بيان المستخدمين غير المعتمدين
+            </option>
+
+            <option value="userProblems">
+                بيان اعمال مستخدم بالمشاكل التي تم عرضها  
+            </option>
+        `;
+
+    }
+
+    else if (category.value === "follow-Up-Committee") {
+
+        reportType.innerHTML += `
+            <option value="committeeSolved">
+
+                بيان اعمال عضو لجنة المتابعة التي  تم حلها 
+            </option>
+
+            <option value="committeeSolvedPeriod">
+                  بيان اعمال عضو لجنة المتابعة التي  تم حلها خلال فترة
+            </option>
+
+            <option value="userApprovalOfficer">
+               المسؤول عن اعتماد المستخدم 
+            </option>
+
+            {{!-- <option value="responseOfficer">
+             المسؤول عن الرد 
+            </option> --}}
+        `;
+
+    }
+
+});
+
+// ظهور اسماء المستخدمين و فلترة التاريخ من و الي 
+ 
+
+reportType.addEventListener("change", function () {
+
+    if (reportType.value === "userProblems") {
+
+        userSelect.style.display = "block";
+
+    } else {
+
+        userSelect.style.display = "none";
+
+    }
+
+    if (reportType.value === "committeeSolvedPeriod" ||  reportType.value === "userApprovalOfficer") {
+
+        dateFrom.style.display = "block";
+
+        dateTo.style.display = "block";
+
+        adminSelect.style.display = 'block';
+
+    } else {
+
+        dateFrom.style.display = "none";
+
+        dateTo.style.display = "none";
+
+        adminSelect.style.display = 'none';
+
+    }
+
+});
+
+
+flatpickr("#fromDateInput", {
+    dateFormat: "Y-m-d",
+    allowInput: true
+});
+
+flatpickr("#toDateInput", {
+    dateFormat: "Y-m-d",
+    allowInput: true
+});
+
+
+</script>

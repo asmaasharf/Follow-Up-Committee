@@ -1,0 +1,786 @@
+<link rel="stylesheet" href="/stylesheets/views/users/technicalNotes.css">
+
+
+<!--- dashboard--->
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>document</title>
+
+</head>
+<body class="body-main">
+    <div class="menu">
+        <ul>
+            <li class="profile">
+                <div class="img-box">
+                    <img src="/images/صورة للموقع 2.jfif" alt="">
+                </div>
+
+                <div class="user-info">
+                    <div class="short-name">{{user.username}}</div>
+
+                    <div class="full-name">{{user.fullname}}</div>
+
+                <p class="user-role">
+                        {{user.jobTitle}}
+                </p>
+                <a href="/users/change-password" class="change-password">
+    
+                        <span>تغيير كلمة المرور</span>
+                </a>
+
+                </div>
+            </li>
+
+          
+            <!---اول قائمة تحت اسم البروفايل--->
+       
+            {{#if isAdmin}}
+            <li>
+                <a href="/users/manage-users">
+                <i class="fa-solid fa-users"></i>
+                <p>إدارة المستخدمين</p>
+                </a>
+            </li>
+            {{/if}}
+             <!---- ثاني قائمه--->
+
+            <li>
+                <a href="/">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <p>إضافة مشكلة جديدة</p>
+                </a>
+            </li>
+
+
+             <!---- ثالث قائمه--->
+
+            <li>
+                <a href="/technicalNotes">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <p>توضيح نقاط فنية</p>
+                </a>
+            </li>
+            <!---- رابع قائمه--->
+
+            <li>
+                <a href="/inquiries">
+                    <i class="fa-solid fa-comments"></i>
+                    <p>الاستفسارات</p>
+                </a>
+            </li>
+
+            {{!-- خامس قائمة --}}
+
+            <li>
+                <a href="/reports">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <p>التقارير</p>
+                </a>
+            </li>
+             
+
+        
+             <!---- سادس قائمه--->
+
+            <li class="log-out">
+                 <a href="/users/logout">
+                    <i class="fas fa-sign-out"></i>
+                    <p>تسجيل خروج </p>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="title-info">
+            <p>لجنة متابعة اداء المراكز التكنولوجية بالمحافظة</p>
+            <i class="fas fa-chart-bar"></i>
+        </div>
+
+
+<div class="content-technicalNotes">
+
+    <div class="page-header">
+        <h2>توضيح النقاط الفنية</h2>
+        <p>إضافة وإدارة التوضيحات الفنية الخاصة بالخدمات</p>   
+    </div>
+
+
+<div class="table-container">
+
+    <table class="table table-bordered technicalNotes-table">
+
+        <thead>
+
+            <tr>
+                
+                <th>م</th>
+
+                <th>كود الخدمة</th>
+
+                <th>التوضيح</th>
+
+                <th>التاريخ</th>
+
+                <th>المسؤول</th>
+
+                <th>الإجراء</th>
+
+            </tr>
+
+        </thead>
+
+ <tbody id="notesTable">
+
+{{#each notes}}
+
+<tr>
+
+    <td>{{serialNumber @index ../currentPage 10}}</td>
+
+    <td>{{serviceCode}}</td>
+
+    <td>
+
+    <div class="text-preview">
+        {{note}}
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="التوضيح الفني"
+        data-text="{{note}}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+
+</td>
+
+    <td>{{formatDate createdAt}}</td>
+
+    <td>{{createdBy.username}}</td>
+
+    
+
+    <td>
+
+    {{#if ../isAdmin}}
+
+        <button 
+        class="btn btn-success edit-btn"
+        data-id="{{_id}}">
+            تعديل
+        </button>
+
+
+        <button 
+        class="btn btn-danger delete-btn"
+        data-id="{{_id}}">
+            حذف
+        </button>
+
+    {{else}}
+
+        -
+
+    {{/if}}
+
+    </td>
+
+</tr>
+
+{{/each}}
+
+
+
+<!-- صف الإدخال دائماً آخر الجدول -->
+
+{{#if isAdmin}}
+    
+    <tr id="inputRow">
+
+    <td>-</td>
+
+    <td>
+        <input
+         type="text" 
+         id="serviceCode"
+         class="form-control"
+         placeholder="كود الخدمة"
+        >
+    </td>
+
+    <td>
+        <textarea 
+         id="noteText" 
+         class="form-control"
+         rows="2"
+         placeholder="اكتب التوضيح"
+         ></textarea>
+    </td>
+
+    <td>-</td>
+
+    <td>{{currentUser.username}}</td>
+
+    <td>
+
+        <button
+            class="btn btn-primary"
+            id="saveNote">
+
+            حفظ
+
+        </button>
+
+    </td>
+
+</tr>
+
+{{/if}}
+
+
+
+</tbody>
+
+    </table>
+
+
+</div>
+<div class="pagination">
+
+    {{#if hasPrevPage}}
+
+        <a
+            href="/technicalNotes?page={{prevPage}}"
+            class="btn btn-secondary">
+
+            السابق
+
+        </a>
+
+    {{/if}}
+
+
+    <span class="page-number">
+
+        الصفحة {{currentPage}} من {{totalPages}}
+
+    </span>
+
+
+    {{#if hasNextPage}}
+
+        <a
+            href="/technicalNotes?page={{nextPage}}"
+            class="btn btn-secondary">
+
+            التالي
+
+        </a>
+
+    {{/if}}
+
+    </div>
+
+</div>
+
+
+{{!-- الموديل الخاص بزر عين --}}
+
+<div id="textModal" class="text-modal">
+
+    <div class="text-modal-content">
+
+        <div class="text-modal-header">
+
+            <h3 id="modalTitle"></h3>
+
+            <span id="closeModal">&times;</span>
+
+        </div>
+
+        <textarea
+            id="modalText"
+            readonly></textarea>
+
+    </div>
+
+</div>
+
+
+</body>
+
+
+
+{{!-- ملف الجافا سكريبت --}}
+
+<script>
+
+function attachSaveEvent() {
+
+    const saveBtn = document.getElementById("saveNote");
+
+    if(!saveBtn)return;
+
+    saveBtn.onclick = function () {
+
+        const serviceCode = document.getElementById("serviceCode").value.trim();
+
+        const noteText = document.getElementById("noteText").value.trim();
+
+        if (serviceCode === "" || noteText === "") {
+
+            alert("من فضلك أدخل كود الخدمة والتوضيح");
+
+            return;
+
+        }
+
+        fetch("/technicalNotes/addNotes", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                serviceCode: serviceCode,
+
+                note: noteText
+
+            })
+
+        })
+
+        .then(res => res.json())
+
+        .then(result => {
+
+            if (!result.success) {
+
+                alert(result.message);
+
+                return;
+
+            }
+
+            const inputRow = document.getElementById("inputRow");
+
+            inputRow.removeAttribute("id");
+
+            const tbody = document.getElementById("notesTable");
+
+           // أول صف بيانات (غير صف الإدخال)
+            const firstDataRow = [...tbody.children].find(row => row.id !== "inputRow");
+
+          // انقل الصف الذي تم حفظه لأول الجدول
+            tbody.insertBefore(inputRow, firstDataRow);
+
+
+             // ارجع لأعلى الصفحة
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+            inputRow.innerHTML = `
+
+                <td>-</td>
+
+                <td>${result.note.serviceCode}</td>
+
+               <td>
+
+    <div class="text-preview">
+        ${result.note.note}
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="التوضيح"
+        data-text="${result.note.note}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+
+</td>
+
+                <td>${new Date(result.note.createdAt).getDate()}-${new Date(result.note.createdAt).getMonth()+1}-${new Date(result.note.createdAt).getFullYear()}</td>
+
+                <td>${result.note.username}</td>
+
+                <td>
+
+                    <button
+                        class="btn btn-success edit-btn"
+                        data-id="${result.note._id}">
+
+                        تعديل
+
+                    </button>
+
+                    <button
+                        class="btn btn-danger delete-btn"
+                        data-id="${result.note._id}">
+
+                        حذف
+
+                    </button>
+
+                </td>
+
+            `;
+
+            const newRow = document.createElement("tr");
+
+            newRow.id = "inputRow";
+
+            newRow.innerHTML = `
+
+                <td>-</td>
+
+                <td>
+
+                    <input
+                        type="text"
+                        id="serviceCode"
+                        class="form-control"
+                        placeholder="كود الخدمة">
+
+                </td>
+
+                <td>
+
+                    <textarea
+                        id="noteText"
+                        class="form-control"
+                        rows="2"
+                        placeholder="اكتب التوضيح"></textarea>
+
+                </td>
+
+                <td>-</td>
+
+                <td>${result.note.username}</td>
+
+                <td>
+
+                    <button
+                        class="btn btn-primary"
+                        id="saveNote">
+
+                        حفظ
+
+                    </button>
+
+                </td>
+
+            `;
+
+            document.getElementById("notesTable").appendChild(newRow);
+
+            updateSerialNumbers();
+
+            attachSaveEvent();
+            attachViewEvents();
+
+            
+
+            //attachDeleteEvents();
+
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            alert("حدث خطأ");
+
+        });
+
+    };
+
+}
+
+attachSaveEvent();
+
+
+// زر التعديل 
+
+
+document.getElementById("notesTable").addEventListener("click", function (e) {
+
+    // زر تعديل
+    if (e.target.classList.contains("edit-btn")) {
+
+        const button = e.target;
+
+        const row = button.closest("tr");
+
+        const serviceCode = row.children[1].innerText.trim();
+
+        const note = row.children[2].innerText.trim();
+
+        row.children[1].innerHTML = `
+            <input
+                type="text"
+                class="form-control service-input"
+                value="${serviceCode}">
+        `;
+
+        row.children[2].innerHTML = `
+            <textarea
+                class="form-control note-input"
+                rows="2">${note}</textarea>
+        `;
+
+        button.textContent = "حفظ";
+
+        button.classList.remove("btn-success");
+        button.classList.add("btn-primary");
+
+        button.classList.remove("edit-btn");
+        button.classList.add("save-edit-btn");
+
+        return;
+    }
+
+    // زر حفظ
+    if (e.target.classList.contains("save-edit-btn")) {
+
+        saveEdit.call(e.target);
+
+    }
+
+    //  زر حذف 
+
+    if (e.target.classList.contains("delete-btn")) {
+
+    if (!confirm("هل أنت متأكد من حذف هذا التوضيح؟")) {
+
+        return;
+
+    }
+
+    const button = e.target;
+
+    const row = button.closest("tr");
+
+    const id = button.dataset.id;
+
+    fetch("/technicalNotes/deleteNote/" + id, {
+
+        method: "DELETE"
+
+    })
+
+    .then(res => res.json())
+
+    .then(result => {
+
+        if (!result.success) {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+    row.remove();
+
+    updateSerialNumbers();  
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        alert("حدث خطأ");
+
+    });
+
+}
+
+});
+
+
+//  حفظ التعديل
+
+function saveEdit() {
+
+    const row = this.closest("tr");
+
+    const id = this.dataset.id;
+
+    const serviceCode = row.querySelector(".service-input").value.trim();
+
+    const note = row.querySelector(".note-input").value.trim();
+
+    if (serviceCode === "" || note === "") {
+
+        alert("من فضلك أدخل البيانات");
+
+        return;
+
+    }
+
+    fetch("/technicalNotes/editNote/" + id, {
+
+        method: "PUT",
+
+        headers: {
+
+            "Content-Type": "application/json"
+
+        },
+
+        body: JSON.stringify({
+
+            serviceCode,
+
+            note
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(result => {
+
+        if (!result.success) {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+        row.children[1].innerHTML = result.note.serviceCode;
+
+        row.children[2].innerHTML = `
+    <div class="text-preview">
+        ${result.note.note}
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="التوضيح"
+        data-text="${result.note.note}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+`;
+
+attachViewEvents();
+
+        this.textContent = "تعديل";
+
+        this.classList.remove("btn-primary");
+        this.classList.add("btn-success");
+
+        this.classList.remove("save-edit-btn");
+        this.classList.add("edit-btn");
+
+       
+
+       
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        alert("حدث خطأ");
+
+    });
+
+}
+
+
+//الموديل
+
+const modal = document.getElementById("textModal");
+
+const modalText = document.getElementById("modalText");
+
+const modalTitle = document.getElementById("modalTitle");
+
+const closeModal = document.getElementById("closeModal");
+
+function attachViewEvents(){
+
+    document.querySelectorAll(".btn-view-text").forEach(btn=>{
+
+        if(btn.dataset.loaded) return;
+
+        btn.dataset.loaded = "true";
+
+        btn.onclick = function(){
+
+            modal.style.display = "block";
+
+            modalTitle.textContent = this.dataset.title;
+
+            modalText.value = this.dataset.text;
+
+        };
+
+    });
+
+}
+
+closeModal.onclick = function(){
+
+    modal.style.display = "none";
+
+};
+
+window.onclick = function(e){
+
+    if(e.target === modal){
+
+        modal.style.display = "none";
+
+    }
+
+};
+
+attachViewEvents();
+
+
+// اعادة ترقيم الجدول تلقائي 
+
+function updateSerialNumbers() {
+
+    let serial = 1;
+
+    document.querySelectorAll("#notesTable tr").forEach(row => {
+
+        if (row.id === "inputRow") return;
+
+        row.children[0].textContent = serial++;
+
+    });
+
+}
+
+</script>

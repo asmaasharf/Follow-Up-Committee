@@ -1,0 +1,583 @@
+
+
+
+/* صفحة ادارة المستخدمين */
+
+
+
+/* // pagination */
+.pagination{
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+}
+
+.page-number{
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+}
+
+/* ===========================
+   عنوان الصفحة
+=========================== */
+.page-header{
+    text-align:center;
+    margin:2px 0 2px;
+    
+}
+
+
+.page-header h2{
+    font-size:35px;
+    color:#fff;
+    font-weight:600;
+    margin-bottom:8px;
+    letter-spacing:.5px;
+}
+
+.page-header h2::after{
+    content:"";
+    display:block;
+    width:90px;
+    height:4px;
+    background:#0481ff;
+    margin:12px auto 0;
+    border-radius:20px;
+}
+
+.page-header p{
+    color:#bfc8d4;
+    font-size:18px;
+    margin-top:16px;
+}
+
+.title-info{
+    background:#0481ff;
+    padding:10px 15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-radius:8px;
+    margin:10px 0 30px;
+}
+
+
+/* ===========================
+   الجدول
+=========================== */
+
+.content .title-info{
+    width: 100%;
+}
+
+.content-user-manage{
+     width:100%;
+    max-width:none;
+}
+
+.users-page table{
+
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:0;
+
+}
+
+.users-page table th{
+
+    background:#0d6efd;
+
+    color:#fff;
+
+    padding:15px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+
+.users-page table td{
+
+    padding:12px;
+
+    text-align:center;
+
+    color:white;
+
+    vertical-align:middle;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.users-page table tr:hover{
+
+    background:rgba(255,255,255,.05);
+
+}
+
+/* ===========================
+   Select
+=========================== */
+
+.role-select{
+
+    width:120px;
+
+    margin:auto;
+
+    border-radius:8px;
+
+}
+
+/* ===========================
+   الأزرار
+=========================== */
+
+.approve-btn,
+.reject-btn,
+.save-role-btn,
+.toggle-status-btn{
+
+    border:none;
+
+    border-radius:8px;
+
+    color:white;
+
+    padding:7px 14px;
+
+    margin:2px;
+
+    cursor:pointer;
+
+    font-size:14px;
+
+    transition:.3s;
+
+}
+
+.approve-btn{
+
+    background:#198754;
+
+}
+
+.approve-btn:hover{
+
+    background:#157347;
+
+}
+
+.reject-btn{
+
+    background:#dc3545;
+
+}
+
+.reject-btn:hover{
+
+    background:#bb2d3b;
+
+}
+
+.save-role-btn{
+
+    background:#0d6efd;
+
+}
+
+.save-role-btn:hover{
+
+    background:#0b5ed7;
+
+}
+
+.toggle-status-btn{
+
+    background:#fd7e14;
+
+}
+
+.toggle-status-btn:hover{
+
+    background:#dc6b08;
+
+}
+
+/* ===========================
+   عمود الإجراءات
+=========================== */
+
+.users-page td:last-child{
+    min-width:230px;
+}
+
+
+
+/* ===========================
+   Badge الخاصة بالأدمن
+=========================== */
+
+.badge{
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-size:14px;
+
+}
+
+/* ازرار ابقاف الحساب وحفظ تحت بعض */
+
+.save-role-btn,
+.toggle-status-btn{
+
+    display:block;
+
+    width:110px;
+
+    margin:6px auto;
+
+}
+/* والغير معتمدين من خلال كلاس ال card عرض جدول المستخدمين المعتمدين */
+
+/* الصفحة */
+
+.users-page{
+    width : 100%;
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+    margin-top:30px;
+}
+
+/* الكارد */
+
+
+
+/* عنوان الكارد */
+
+
+
+/* صفحة ادارة المستخدمين */
+
+/*=============================
+عنوان الصفحة
+==============================*/
+
+
+
+
+/*=============================
+إحصائيات
+==============================*/
+
+.users-stats{
+    width: 100%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+
+}
+
+.stat-card{
+    
+    
+    height:170px;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+    
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+
+
+.stat-icon{
+
+    font-size:35px;
+
+    margin-bottom:15px;
+
+}
+
+.stat-card h3{
+
+    margin-bottom:15px;
+
+    font-size:18px;
+
+}
+
+.stat-card span{
+
+    font-size:40px;
+
+    font-weight:bold;
+
+}
+
+
+
+.stat-card.pending{
+    background:#f4b400;
+    color:#111;
+}
+
+.stat-card.active{
+    background:#1f9d55;
+}
+
+.stat-card.inactive{
+    background:#dc3545;
+}
+
+
+
+
+/*=============================
+الجداول
+==============================*/
+
+
+.users-page .card{
+    width:100%;
+    background:#162739;
+    border-radius:15px;
+    padding:20px;
+    overflow-x:auto;
+}
+
+.card-title{
+
+    color:white;
+
+    margin-bottom:20px;
+
+    font-size:28px;
+
+}
+
+.page-header{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.page-header h1{
+    font-size:38px;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.page-header p{
+    font-size:17px;
+    color:#b8c1cc;
+}
+
+
+.users-page table{
+    width:100%;
+    min-width:1000px;
+    border-collapse:collapse;
+    
+}
+
+.users-page table td,
+.users-page table th{
+
+    white-space:nowrap;
+     padding:10px 8px;
+    font-size:15px;
+
+}
+
+.users-page table td{
+    padding: 8px 10px;      /* بدل 18px */
+    vertical-align: middle;
+}
+
+.users-page .role-select{
+
+    width:140px;
+
+}
+
+.users-page .approve-btn,
+.users-page .reject-btn,
+.users-page .save-role-btn,
+.users-page .toggle-status-btn{
+
+    min-width:100px;
+
+}
+.approve-btn,
+.reject-btn,
+.save-role-btn,
+.toggle-status-btn{
+    padding: 6px 12px;
+    font-size: 13px;
+    margin: 3px auto;
+}
+
+/* عرض ثابت لاعمدة الجدول */
+/* .users-page td:first-child,
+.users-page th:first-child{
+    width: 220px;
+} */
+
+
+/* منع التاريخ من النزول سطرين */
+
+.manageUsers-table td:nth-child(5),
+.manageUsers-table td:nth-child(7){
+
+    white-space:nowrap;
+
+}
+
+/* توزيع عرض لاعمدة */
+
+.manageUsers-table th:nth-child(1),
+.manageUsers-table td:nth-child(1){
+
+    width:15%;
+}
+
+.manageUsers-table th:nth-child(2),
+.manageUsers-table td:nth-child(2){
+    width:8%;
+}
+
+.manageUsers-table th:nth-child(3),
+.manageUsers-table td:nth-child(3){
+    width:9%;
+}
+
+.manageUsers-table th:nth-child(4),
+.manageUsers-table td:nth-child(4){
+    width:15%;
+}
+
+.manageUsers-table th:nth-child(5),
+.manageUsers-table td:nth-child(5){
+    width:8%;
+}
+
+.manageUsers-table th:nth-child(6),
+.manageUsers-table td:nth-child(6){
+    width:9%;
+}
+
+.manageUsers-table th:nth-child(7),
+.manageUsers-table td:nth-child(7){
+    width:6%;
+}
+
+.manageUsers-table th:nth-child(8),
+.manageUsers-table td:nth-child(8){
+    width:7%;
+}
+
+
+
+.manageUsers-table td,
+.manageUsers-table th{
+    box-sizing: border-box;
+}
+
+
+
+
+
+/* منع التاريخ من النزول سطرين */
+
+.approved-table td:nth-child(5),
+.approved-table td:nth-child(7){
+
+    white-space:nowrap;
+
+}
+
+/* توزيع عرض لاعمدة */
+
+.approved-table th:nth-child(1),
+.approved-table td:nth-child(1){
+
+    width:15%;
+}
+
+.approved-table th:nth-child(2),
+.approved-table td:nth-child(2){
+    width:8%;
+}
+
+.approved-table th:nth-child(3),
+.approved-table td:nth-child(3){
+    width:9%;
+}
+
+.approved-table th:nth-child(4),
+.approved-table td:nth-child(4){
+    width:15%;
+}
+
+.approved-table th:nth-child(5),
+.approved-table td:nth-child(5){
+    width:8%;
+}
+
+.approved-table th:nth-child(6),
+.approved-table td:nth-child(6){
+    width:9%;
+}
+
+.approved-table th:nth-child(7),
+.approved-table td:nth-child(7){
+    width:6%;
+}
+
+.approved-table th:nth-child(8),
+.approved-table td:nth-child(8){
+    width:7%;
+}
+
+.approved-table th:nth-child(9),
+.approved-table td:nth-child(9){
+    width:7%;
+}
+
+
+
+.approved-table td,
+.approved-table th{
+    box-sizing: border-box;
+}

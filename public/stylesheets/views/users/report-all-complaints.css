@@ -1,0 +1,275 @@
+/* ===========================
+   الصفحة
+=========================== */
+
+body{
+    margin:0;
+    padding:0;
+    background:#1d2635;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* ===========================
+   صفحة التقرير
+=========================== */
+
+.report-page{
+
+    width:210mm;
+    min-height:297mm;
+
+    margin:20px auto;
+    padding:18mm;
+
+    background:#fff;
+
+    box-sizing:border-box;
+
+    page-break-after:always;
+    break-after:page;
+
+}
+
+.report-page:last-child{
+
+    page-break-after:auto;
+    break-after:auto;
+
+}
+
+
+/* ===========================
+   الهيدر
+=========================== */
+
+.report-header{
+
+    width:100%;
+
+    margin-bottom:25px;
+
+}
+
+.image-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    width:100%;
+
+}
+
+.image-title img{
+
+    width:70px;
+
+    height:auto;
+
+}
+
+.title{
+
+    text-align:center;
+
+    margin-top:-60px;
+
+}
+
+.title h3{
+
+    margin:0;
+
+    font-size:24px;
+
+    color:#123;
+
+}
+
+.title h4{
+
+    margin:8px 0 0;
+
+    font-size:18px;
+
+    color:#123;
+
+    font-weight:normal;
+
+}
+
+.report-title{
+
+    text-align:center;
+
+    margin-top:25px;
+
+}
+
+.report-title h2,
+.report-title h3,
+.report-title h4{
+
+    margin:0;
+
+    color:#123;
+
+}
+
+
+/* فترة التقرير  */
+
+.report-period{
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: normal;
+    color: #444;
+    text-align: center;
+}
+
+
+/* ===========================
+   الجدول
+=========================== */
+
+.report-page table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+.report-page th{
+
+    background:#1976d2;
+
+    color:#fff;
+
+    border:1px solid #888;
+
+    padding:12px;
+
+    font-size:17px;
+
+}
+
+.report-page td{
+
+    border:1px solid #888;
+
+    padding:10px;
+
+    text-align:center;
+
+    font-size:15px;
+
+}
+
+.report-page tbody tr:nth-child(even){
+
+    background:#f8f8f8;
+
+}
+
+.report-page tbody tr:hover{
+
+    background:#eef6ff;
+
+}
+
+
+/* ===========================
+   الفوتر
+=========================== */
+
+.report-footer{
+
+    width:210mm;
+
+    margin:20px auto;
+
+    padding:10px 18mm;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:16px;
+
+    background:#fff;
+
+    box-sizing:border-box;
+
+}
+
+
+/* ===========================
+   الطباعة
+=========================== */
+
+@page{
+
+    size:A4;
+
+    margin:15mm;
+
+}
+
+@media print{
+
+    body{
+
+        background:#fff;
+
+        margin:0;
+
+    }
+
+    .report-page{
+
+        margin:0;
+
+        box-shadow:none;
+
+        page-break-after:always;
+
+    }
+
+    .report-page:last-child{
+
+        page-break-after:auto;
+
+    }
+
+    table{
+
+        page-break-inside:auto;
+
+    }
+
+    tr{
+
+        page-break-inside:avoid;
+
+    }
+
+    thead{
+
+        display:table-header-group;
+
+    }
+
+    tfoot{
+
+        display:table-footer-group;
+
+    }
+
+}
+

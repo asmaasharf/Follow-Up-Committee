@@ -1,0 +1,390 @@
+
+/* pagination */
+
+/* // pagination */
+.pagination{
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+}
+
+.page-number{
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+}
+
+/* الهيدر */
+
+.content-technicalNotes{
+
+    margin: 30px;
+}
+
+
+.content-title-info{
+   
+
+    flex:1;
+
+    margin-right:140px;
+    
+
+    padding:20px;
+
+    transition:.4s;
+    
+}
+
+.page-header{
+    text-align:center;
+    margin:2px 0 2px;
+    
+}
+
+.page-header h2{
+    font-size:35px;
+    color:#fff;
+    font-weight:600;
+    margin-bottom:8px;
+    letter-spacing:.5px;
+}
+
+.page-header h2::after{
+    content:"";
+    display:block;
+    width:90px;
+    height:4px;
+    background:#0481ff;
+    margin:12px auto 0;
+    border-radius:20px;
+}
+
+.page-header p{
+    color:#bfc8d4;
+    font-size:18px;
+    margin-top:16px;
+}
+
+
+/* النص لو طويل يلف */
+
+.technicalNotes-table td {
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* النص المختصر للاستفسار والرد  */
+.text-preview{
+
+    max-height:45px;
+
+    overflow:hidden;
+
+    line-height:1.7;
+
+    color:#222;
+
+    margin-bottom:8px;
+
+}
+
+
+
+/* حاوية الجدول */
+.table-container{
+
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+
+    max-height: 600px;
+    overflow-y: auto;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+}
+
+/* الجدول */
+
+.technicalNotes-table{
+
+    width:100%;
+    border-collapse:collapse;
+}
+
+/* رأس الجدول */
+
+.technicalNotes-table thead th{
+
+    position: sticky;
+    top:0;
+    z-index:10;
+
+    background:#283041;
+    color:white;
+
+    text-align:center;
+
+    padding:18px;
+
+    font-size:22px;
+}
+
+/* الصفوف */
+
+.technicalNotes-table td{
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    padding:15px;
+
+    font-size:20px;
+}
+
+/* زر حذف وتعديل */
+
+.edit-btn,
+.delete-btn{
+
+    min-width:75px;
+
+    white-space:nowrap;
+
+    margin:2px;
+}
+
+/* textarea */
+
+#noteText{
+
+    resize:none;
+}
+
+/* كود الخدمة */
+#serviceCode{
+
+    text-align:center;
+}
+
+/* الباجنيشن */
+
+.pagination{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:20px;
+}
+
+.table-container{
+
+    border:2px solid #d9d9d9;
+}
+
+
+
+/* ايكونة العين  */
+
+.btn-view-text{
+
+    width:20px;
+
+    height:20px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#0d6efd;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    margin-right: 250px;
+
+    
+
+}
+
+
+.btn-view-text:hover{
+
+    background:#084298;
+
+    transform:scale(1.08);
+
+}
+
+/* خلفية النافذه */
+/* الموديل */
+
+/* خلفية النافذه */
+
+.text-modal{
+
+    display:none;
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    background:rgba(0,0,0,.45);
+
+    z-index:9999;
+
+}
+
+/* رأس النافذه */
+
+.text-modal-header{
+
+    background:#0d6efd;
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 20px;
+
+}
+
+.text-modal-header h3{
+
+    margin:0;
+
+    color:#fff;
+
+}
+
+#closeModal{
+
+    font-size:30px;
+
+    cursor:pointer;
+
+    color:#fff;
+
+}
+
+/* مربع النص */
+#modalText{
+
+    width:100%;
+
+    height:350px;
+
+    border:none;
+
+    resize:vertical;
+
+    padding:20px;
+
+    font-size:16px;
+
+    color:#222;
+
+    outline:none;
+
+    box-sizing:border-box;
+
+}
+
+
+/* توسيط جميع خلايا الجدول */
+.technicalNotes-table th,
+.technicalNotes-table td{
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* أي عناصر داخل الخلايا تبقى في المنتصف */
+.technicalNotes-table td{
+    padding: 12px 10px;
+}
+
+
+/* توسيط النص داخل الـ textarea الموجودة في صف الإدخال فقط */
+#inputRow textarea{
+    text-align: center;
+}
+
+/* // تثبيت الصفحه من الاعلي عن الحركة الجدول فقط ال يتعمله اسكرول  */
+
+/* .table-container{
+
+    height: calc(100vh - 220px);   /* عدلي الرقم حسب ارتفاع الهيدر */
+    /* overflow-y: auto; */
+/* } */ 
+
+
+/* //  يمنع الازرار انها تنكسر ع سطرين مع ال  hover */
+.btn {
+    white-space: nowrap;
+}
+
+
+
+/* عرض اعمدة الجدول */
+
+
+.technicalNotes-table th:nth-child(1),
+.technicalNotes-table td:nth-child(1){
+    width:3%;
+}
+
+.technicalNotes-table th:nth-child(2),
+.technicalNotes-table td:nth-child(2){
+    width:8%;
+}
+
+.technicalNotes-table th:nth-child(3),
+.technicalNotes-table td:nth-child(3){
+    width:20%;
+}
+
+.technicalNotes-table th:nth-child(4),
+.technicalNotes-table td:nth-child(4){
+    width:5%;
+}
+
+.technicalNotes-table th:nth-child(5),
+.technicalNotes-table td:nth-child(5){
+    width:5%;
+}
+
+.technicalNotes-table th:nth-child(6),
+.technicalNotes-table td:nth-child(6){
+    width:4%;
+}
+
+

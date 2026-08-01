@@ -1,0 +1,84 @@
+
+
+/* صفحة signup */
+
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+
+
+
+/* خلفية انشاء الحساب */
+
+body {
+  direction: rtl;
+  font-family: 'Cairo', sans-serif;
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  /* background-color: #001; */
+  background: url('/images/behira3.jpg');
+
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+
+.signup-wrapper {
+  background: url('/images/behira.jpg');
+  background-size: 100% 100%;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  
+  min-height: 100vh;  /*  - بتخلي الخلفية تملى الشاشة */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+
+.signup-wrapper .table-signup{
+  height: 95%;
+}
+
+.signup-wrapper .table-signup h5{
+  padding: 0;
+  margin: 1px;
+}
+
+/* حقول الإدخال */
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea{
+  height: 38px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.form-group select{
+   height: 48px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+ button{
+  height: 44px;
+}
+
+

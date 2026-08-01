@@ -1,0 +1,74 @@
+
+<link rel="stylesheet" href="/stylesheets/views/users/signin.css">
+<link rel="stylesheet" href="/stylesheets/views/users/style.css">
+
+
+<div class="signin-wrapper">
+
+<div class="col-4 offset-4"  style="padding-top: 80px;">
+    <h5 class="text-center">تسجيل دخول</h5>
+     {{#if hasErrors}}
+        <div   >
+            <ul>
+                 {{#each validationMessages}}
+
+                 <li style="color: #fff; margin-bottom: 10px; background: rgba(13,71,161,0.25);
+                 padding: 10px 15px; border-radius: 8px; border-right: 3px solid #ff3333;">{{this}}</li>
+
+            {{/each}}
+            </ul>
+        </div>
+        
+    {{/if}}
+   
+<form action="signin" method="post" >
+
+<div class="form-group">
+    {{!-- <label for="city">مركز ومدينة</label> --}}
+    <select  name="city" id="city" class="form-control" required>
+      
+    <option  style="background:#2d3748;"   value="" disabled selected>اختر المركز والمدينة</option>
+    <option  style="background:#2d3748;"   value="الديوان العام">الديوان العام</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة دمنهور">مركز ومدينة دمنهور</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة شبراخيت">مركز ومدينة شبراخيت</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة ايتاي البارود"> مركز ومدينة ايتاي البارود</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة ابوحمص">مركز ومدينة ابوحمص</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة كفر الدوار"> مركز ومدينة كفر الدوار</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة كوم حمادة"> مركز ومدينة كوم حمادة</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة ابوالمطامير">مركز ومدينة ابوالمطامير</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة الدلنجات">مركز ومدينة الدلنجات</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة وادي النطرون">مركز ومدينة وادي النطرون</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة ادكو">مركز ومدينة ادكو</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة رشيد">مركز ومدينة رشيد</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة بدر">مركز ومدينة بدر</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة حوش عيسي">مركز ومدينة حوش عيسي</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة المحمودية">مركز ومدينة المحمودية</option>
+    <option  style="background: #2d3748;"  value="مركز ومدينة الرحمانية">مركز ومدينة الرحمانية</option>
+   
+    </select>
+</div>
+
+     <div class="form-group">
+        {{!-- <label for="name">اسم المستخدم</label> --}}
+        <input type="text" name="username" placeholder="اسم المستخدم" class="form-control" >
+    </div>
+
+
+    <div class="form-group">
+        {{!-- <label for="password">الرقم السري</label> --}}
+        <input type="password" name="password" placeholder="ادخل كلمة المرور " class="form-control">
+    </div>
+
+<button type="submit" class="btn btn-primary" > تسجيل دخول </button>
+
+<div class="login-links">
+
+    <a href="/users/signup" class="login-link">
+        إنشاء حساب
+    </a>
+</div>
+</form>
+
+</div>
+</div>
+

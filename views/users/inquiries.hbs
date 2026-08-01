@@ -1,0 +1,1011 @@
+<link rel="stylesheet" href="/stylesheets/views/users/inquiries.css">
+
+
+<!--- dashboard--->
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="5.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>document</title>
+
+</head>
+<body class="body-main">
+    <div class="menu">
+        <ul>
+            <li class="profile">
+                <div class="img-box">
+                    <img src="/images/صورة للموقع 2.jfif" alt="">
+                </div>
+
+                <div class="user-info">
+                    <div class="short-name">{{user.username}}</div>
+
+                    <div class="full-name">{{user.fullname}}</div>
+
+                <p class="user-role">
+                        {{user.jobTitle}}
+                </p>
+
+                <a href="/users/change-password" class="change-password">
+    
+                        <span>تغيير كلمة المرور</span>
+                </a>
+
+                </div>
+            </li>
+
+          
+            <!---اول قائمة تحت اسم البروفايل--->
+       
+            {{#if isAdmin}}
+            <li>
+                <a href="/users/manage-users">
+                <i class="fa-solid fa-users"></i>
+                <p>إدارة المستخدمين</p>
+                </a>
+            </li>
+            {{/if}}
+             <!---- ثاني قائمه--->
+
+            <li>
+                <a href="/">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <p>إضافة مشكلة جديدة</p>
+                </a>
+            </li>
+
+
+             <!---- ثالث قائمه--->
+
+            <li>
+                <a href="/technicalNotes">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <p>توضيح نقاط فنية</p>
+                </a>
+            </li>
+            <!---- رابع قائمه--->
+
+            <li>
+                <a href="/inquiries">
+                    <i class="fa-solid fa-comments"></i>
+                    <p>الاستفسارات</p>
+                </a>
+            </li>
+
+            {{!-- خامس قائمة --}}
+
+            <li>
+                <a href="/reports">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <p>التقارير</p>
+                </a>
+            </li>
+             
+
+        
+             <!---- سادس قائمه--->
+
+            <li class="log-out">
+                 <a href="/users/logout">
+                    <i class="fas fa-sign-out"></i>
+                    <p>تسجيل خروج </p>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+
+       <div class="content">
+        <div class="title-info">
+            <p>لجنة متابعة اداء المراكز التكنولوجية بالمحافظة</p>
+            <i class="fas fa-chart-bar"></i>
+        </div>
+        
+        
+<div class="content-inquiries">
+
+    <div class="page-header">
+        <h2>الاستفسارات</h2>
+        <p>تسجيل ومتابعة الاستفسارات الفنية</p>
+    </div>
+
+<div class="table-container">
+
+    <table class="table table-bordered inquiry-table">
+
+        <thead>
+
+            <tr>
+
+
+                <th>المركز</th>
+
+                <th>اسم المستخدم</th>
+
+                <th>الوظيفة</th>
+
+                <th>الاستفسار</th>
+
+                <th>تاريخ الاستفسار</th>
+
+                <th>الرد</th>
+
+                <th>تاريخ الرد</th>
+
+                <th>مسؤول الرد</th>
+
+                <th>الإجراء</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="inquiryTable">
+
+{{#each inquiries}}
+
+<tr>
+
+
+    <td>{{createdBy.city}}</td>
+
+    <td>{{createdBy.username}}</td>
+
+    <td>{{createdBy.jobTitle}}</td>
+
+    <td>
+
+    <div class="text-preview">
+
+        {{inquiry}}
+
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="الاستفسار"
+        data-text="{{inquiry}}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+
+</td>
+
+    <td>{{formatDate createdAt}}</td>
+
+<td>
+
+{{#if reply}}
+
+    <div class="text-preview">
+
+        {{reply}}
+
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="الرد"
+        data-text="{{reply}}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+
+{{else}}
+
+-
+
+{{/if}}
+
+</td>
+
+<td>
+    {{#if replyDate}}
+        {{formatDate replyDate}}
+    {{else}}
+        -
+    {{/if}}
+</td>
+
+    <td>
+
+        {{#if replyBy}}
+
+            {{replyBy.username}}
+
+        {{else}}
+
+            -
+
+        {{/if}}
+
+    </td>
+
+    <td>
+
+{{#if ../isAdmin}}
+
+<button
+class="btn btn-success reply-btn"
+data-id="{{_id}}">
+تعديل
+</button>
+
+{{else}}
+
+{{#if reply}}
+
+-
+
+{{else}}
+
+<button
+class="btn btn-success edit-inquiry-btn"
+data-id="{{_id}}">
+تعديل
+</button>
+
+<button
+class="btn btn-danger delete-inquiry-btn"
+data-id="{{_id}}">
+حذف
+</button>
+
+{{/if}}
+
+{{/if}}
+
+</td>
+
+</tr>
+
+{{/each}}
+
+<!-- صف الإدخال دائماً آخر الجدول -->
+
+<tr id="inputRow">
+
+    <td>{{currentUser.city}}</td>
+
+    <td>{{currentUser.username}}</td>
+
+    <td>{{currentUser.jobTitle}}</td>
+
+    <td>
+
+        <textarea
+            id="inquiryText"
+            class="form-control"
+            rows="2"
+            placeholder="اكتب الاستفسار"></textarea>
+
+    </td>
+
+    <td>-</td>
+
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+
+    <td>
+
+        <button
+            class="btn btn-primary"
+            id="saveInquiry">
+
+            حفظ
+
+        </button>
+
+    </td>
+
+</tr>
+
+</tbody>
+
+    </table> 
+
+    <div class="pagination">
+
+    {{#if hasPrevPage}}
+
+        <a
+            href="/inquiries?page={{prevPage}}"
+            class="btn btn-secondary">
+
+            السابق
+
+        </a>
+
+    {{/if}}
+
+
+    <span class="page-number">
+
+        الصفحة {{currentPage}} من {{totalPages}}
+
+    </span>
+
+
+    {{#if hasNextPage}}
+
+        <a
+            href="/inquiries?page={{nextPage}}"
+            class="btn btn-secondary">
+
+            التالي
+
+        </a>
+
+    {{/if}}
+
+    </div>
+
+</div>
+
+
+<div id="textModal" class="text-modal">
+
+    <div class="text-modal-content">
+
+        <div class="text-modal-header">
+
+            <h3 id="modalTitle"></h3>
+
+            <span id="closeModal">&times;</span>
+
+        </div>
+
+        <textarea
+            id="modalText"
+            readonly></textarea>
+
+    </div>
+
+</div>
+
+</body>
+
+
+
+
+
+{{!-- // الجافا سكريبت  --}}
+
+<script>
+
+// متغيرات التعديل
+
+let editingInquiryId = null;
+
+let editingRow = null;
+
+function attachSaveEvent() {
+
+const saveInquiryBtn = document.getElementById("saveInquiry");
+
+saveInquiryBtn.onclick = function () {
+
+        const inquiryText = document.getElementById("inquiryText").value.trim();
+
+        if (inquiryText === "") {
+
+            alert("من فضلك اكتب الاستفسار");
+
+            return;
+
+        }
+
+        // لو احنا فى وضع التعديل
+if (editingInquiryId) {
+
+    fetch("/inquiries/updateInquiry/" + editingInquiryId, {
+
+        method: "PUT",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            inquiry: inquiryText
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(result => {
+
+        if (!result.success) {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+        // تحديث نص الاستفسار
+    editingRow.children[3].innerHTML = `
+    <div class="text-preview">
+        ${result.updatedInquiry.inquiry}
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="الاستفسار"
+        data-text="${result.updatedInquiry.inquiry}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+`;
+
+        // إعادة أزرار الإجراءات
+editingRow.children[8].innerHTML = `
+    <button
+        class="btn btn-success edit-inquiry-btn"
+        data-id="${result.updatedInquiry._id}">
+        تعديل
+    </button>
+
+    <button
+        class="btn btn-danger delete-inquiry-btn"
+        data-id="${result.updatedInquiry._id}">
+        حذف
+    </button>
+`;
+
+        // تنظيف النموذج
+        document.getElementById("inquiryText").value = "";
+
+        document.getElementById("saveInquiry").textContent = "حفظ";
+
+        editingInquiryId = null;
+
+        editingRow = null;
+
+        attachViewEvents();
+        attachEditEvents();
+        attachDeleteEvents();
+
+        // ارجع لأعلى الصفحة
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        alert("حدث خطأ");
+
+    });
+
+    return;
+
+}
+
+        fetch("/inquiries/addInquiry", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                inquiry: inquiryText
+
+            })
+
+        })
+
+        .then(res => res.json())
+
+        .then(result => {
+
+            if (!result.success) {
+
+                alert("حدث خطأ أثناء الحفظ");
+
+                return;
+
+            }
+
+            // صف الإدخال الحالي
+
+            const inputRow = document.getElementById("inputRow");
+
+            //  لصف بيانات
+
+            inputRow.removeAttribute("id");
+
+   let actionButton = "";
+
+if (result.isAdmin) {
+
+    actionButton = `
+        <button
+            class="btn btn-success reply-btn"
+            data-id="${result.inquiry._id}">
+            تعديل
+        </button>
+    `;
+
+} else {
+
+    actionButton = `
+        <button
+            class="btn btn-success edit-inquiry-btn"
+            data-id="${result.inquiry._id}">
+            تعديل
+        </button>
+
+        <button
+            class="btn btn-danger delete-inquiry-btn"
+            data-id="${result.inquiry._id}">
+            حذف
+        </button>
+    `;
+
+}
+
+            //تنسيق التاريخ
+            
+            const createdDate = new Date(result.inquiry.createdAt);
+
+                const formattedCreatedDate =
+                    createdDate.getDate() + "-" +
+                    (createdDate.getMonth() + 1) + "-" +
+                    createdDate.getFullYear();
+
+            inputRow.innerHTML = `
+
+                <td>${result.inquiry.city}</td>
+
+                <td>${result.inquiry.username}</td>
+
+                <td>${result.inquiry.jobTitle}</td>
+
+                <td>
+
+    <div class="text-preview">
+        ${result.inquiry.inquiry}
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="الاستفسار"
+        data-text="${result.inquiry.inquiry}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+
+</td>
+           
+                <td>${formattedCreatedDate}</td>
+
+            
+
+                <td>-</td>
+
+                <td>-</td>
+
+                <td>-</td>
+
+
+                <td>${actionButton}</td>
+
+            `;
+
+            // إنشاء صف إدخال جديد
+
+            const tbody = document.getElementById("inquiryTable");
+
+// أول صف بيانات (أول tr ليس هو inputRow)
+const firstDataRow = [...tbody.children].find(row => row.id !== "inputRow");
+
+// انقل الصف الذي تم حفظه لأول الجدول
+tbody.insertBefore(inputRow, firstDataRow);
+
+            const newRow = document.createElement("tr");
+
+            newRow.id = "inputRow";
+
+            newRow.innerHTML = `
+
+
+                <td>${result.inquiry.city}</td>
+
+                <td>${result.inquiry.username}</td>
+
+                <td>${result.inquiry.jobTitle}</td>
+
+                <td>
+
+                    <textarea
+                        id="inquiryText"
+                        class="form-control"
+                        rows="2"
+                        placeholder="اكتب الاستفسار"></textarea>
+
+                </td>
+                
+
+                <td>-</td>
+
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+
+
+                <td>
+
+                    <button
+                        class="btn btn-primary"
+                        id="saveInquiry">
+
+                        حفظ
+
+                    </button>
+
+                </td>
+
+            `;
+
+            document.getElementById("inquiryTable").appendChild(newRow);
+
+
+            attachReplyEvents();
+            attachEditEvents();
+            attachSaveEvent();
+            attachViewEvents();
+            attachDeleteEvents();
+
+           window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+            });
+
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+            alert("حدث خطأ");
+
+        });
+
+    };
+
+}
+
+attachSaveEvent();
+attachReplyEvents();
+attachEditEvents();
+attachViewEvents();
+attachDeleteEvents();
+
+
+
+//  زر الحفظ
+
+
+function saveReply() {
+
+    const row = this.closest("tr");
+
+    const inquiryId = this.dataset.id;
+
+    const replyText = row.querySelector(".reply-text").value.trim();
+
+    if (replyText === "") {
+
+        alert("اكتب الرد أولاً");
+
+        return;
+
+    }
+
+    fetch("/inquiries/replyInquiry/" + inquiryId, {
+
+        method: "PUT",
+
+        headers: {
+
+            "Content-Type": "application/json"
+
+        },
+
+        body: JSON.stringify({
+
+            reply: replyText
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(result => {
+
+        if (!result.success) {
+
+            alert(result.message);
+
+            return;
+
+        }
+
+        const replyDate = new Date(result.replyDate);
+
+        const formattedDate =
+        replyDate.getDate() + "-" +
+        (replyDate.getMonth() + 1) + "-" +
+        replyDate.getFullYear();
+
+        row.children[5].innerHTML = `
+    <div class="text-preview">
+        ${result.reply}
+    </div>
+
+    <button
+        type="button"
+        class="btn-view-text"
+        data-title="الرد"
+        data-text="${result.reply}">
+
+        <i class="fa-solid fa-eye"></i>
+
+    </button>
+`;
+
+        row.children[6].innerHTML = formattedDate
+         
+        row.children[7].innerHTML = result.replyBy;
+
+        attachViewEvents();
+
+        this.textContent = "تعديل";
+
+        this.classList.remove("btn-primary");
+        this.classList.add("btn-success");
+        this.classList.remove("save-reply-btn");
+        this.classList.add("reply-btn");        
+
+
+    })
+
+    .catch(err => {
+
+        console.log(err);
+
+        alert("حدث خطأ");
+
+    });
+
+}
+
+
+
+
+
+function attachReplyEvents() {
+
+    document.querySelectorAll(".reply-btn").forEach(button => {
+
+        if (button.dataset.loaded) return;
+
+        button.dataset.loaded = "true";
+
+        button.addEventListener("click", function () {
+
+            // لو الزر بقى حفظ
+            if (this.classList.contains("save-reply-btn")) {
+
+                saveReply.call(this);
+                return;
+
+            }
+
+            const row = this.closest("tr");
+
+            const replyCell = row.children[5];
+
+            const currentReply = replyCell.innerText.trim();
+
+            replyCell.innerHTML = `
+                <textarea
+                    class="form-control reply-text"
+                    rows="2">${currentReply === "-" ? "" : currentReply}</textarea>
+            `;
+
+            this.textContent = "حفظ";
+
+            this.classList.remove("btn-success");
+            this.classList.add("btn-primary");
+
+            this.classList.remove("reply-btn");
+            this.classList.add("save-reply-btn");
+
+
+            
+
+        });
+
+    });
+
+}
+
+
+function attachEditEvents() {
+
+    document.querySelectorAll(".edit-inquiry-btn").forEach(button => {
+
+        if (button.dataset.loaded) return;
+
+        button.dataset.loaded = "true";
+
+        button.onclick = function () {
+
+            const row = this.closest("tr");
+
+            const inquiryText =
+                this.closest("tr")
+                .querySelector(".btn-view-text")
+                .dataset.text;
+
+            document.getElementById("inquiryText").value = inquiryText;
+
+            editingInquiryId = this.dataset.id;
+
+            editingRow = row;
+
+            const btn = document.getElementById("saveInquiry");
+
+            btn.textContent = "تحديث";
+            btn.style.width = "70px";
+            btn.style.whiteSpace = "nowrap";
+
+            window.scrollTo({
+
+                top: document.body.scrollHeight,
+
+                behavior: "smooth"
+
+            });
+
+        };
+
+    });
+
+}
+
+//زر عين ف الاستفسارات والرد
+
+const modal = document.getElementById("textModal");
+
+const modalText = document.getElementById("modalText");
+
+const modalTitle = document.getElementById("modalTitle");
+
+const closeModal = document.getElementById("closeModal");
+
+
+closeModal.onclick=function(){
+
+    modal.style.display="none";
+
+}
+
+
+window.onclick=function(e){
+
+    if(e.target===modal){
+
+        modal.style.display="none";
+
+    }
+
+}
+
+
+//لاضافة حدث للازرار ال انضافت بعد الحفظ
+function attachViewEvents(){
+
+    document.querySelectorAll(".btn-view-text").forEach(btn => {
+
+        if(btn.dataset.loaded) return;
+
+        btn.dataset.loaded = "true";
+
+        btn.onclick = function(){
+
+            modal.style.display = "block";
+
+            modalTitle.textContent = this.dataset.title;
+
+            modalText.value = this.dataset.text;
+
+        };
+
+    });
+
+}
+
+
+// فانكشن حذف اليوزر للاستفسار
+
+function attachDeleteEvents() {
+
+    document.querySelectorAll(".delete-inquiry-btn").forEach(button => {
+
+        if (button.dataset.loaded) return;
+
+        button.dataset.loaded = "true";
+
+        button.onclick = function () {
+
+            if (!confirm("هل أنت متأكد من حذف الاستفسار؟")) {
+                return;
+            }
+
+            const row = this.closest("tr");
+
+            fetch("/inquiries/deleteInquiry/" + this.dataset.id, {
+
+                method: "DELETE"
+
+            })
+
+            .then(res => res.json())
+
+            .then(result => {
+
+                if (!result.success) {
+
+                    alert(result.message);
+
+                    return;
+
+                }
+
+                // حذف الصف من الجدول
+                row.remove();
+
+                alert(result.message);
+
+            })
+
+            .catch(err => {
+
+                console.log(err);
+
+                alert("حدث خطأ");
+
+            });
+
+        };
+
+    });
+
+}
+
+</script>

@@ -1,0 +1,292 @@
+
+
+
+
+/* خلفية صفحة تسجيل الدخول */
+.signin-wrapper {
+  background: url('/images/gov4.png'); /* حطي صورة تانية هنا */
+  background-size: 100% 100%;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+/* تنسيق لون كتابة ال placeholder */
+
+.signin-wrapper input::placeholder {
+  color: #0D47A1 !important;
+  opacity: 1 !important;
+}
+
+.signin-wrapper input::-webkit-input-placeholder {
+  color: #0D47A1 !important;
+  opacity: 1 !important;
+}
+
+.signin-wrapper input::-moz-placeholder {
+  color: #0D47A1 !important;
+  opacity: 1 !important;
+}
+
+/* وده للـ select */
+.signin-wrapper select {
+  color: #0D47A1 !important;
+}
+
+/* لما يختار من الـ select اللون يرجع اسود للاختيارات */
+.signin-wrapper select option {
+  color: #000 !important;
+}
+
+.signin-wrapper select option[value=""] {
+  color: #0D47A1 !important;
+}
+
+/* اتجاه ال select */
+.form-group select,
+.form-group input{
+    width: 100%;
+    text-align: right;
+    direction: rtl;
+}
+
+/* تغيير كلمة المرور  */
+
+.login-links{
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.login-links{
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    transition: .3s;
+}
+
+.login-links:hover{
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+.separator{
+    color: rgba(255,255,255,.6);
+}
+
+
+.change-password-page{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:#0d1726;
+
+    padding:40px;
+}
+
+/* الكارد */
+
+.change-card{
+
+    width:100%;
+
+    max-width:520px;
+
+    background:#162739;
+
+    border-radius:18px;
+
+    padding:40px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+/* الهيدر */
+
+.card-header{
+
+    text-align:center;
+
+    margin-bottom:35px;
+}
+
+.card-header i{
+
+    font-size:45px;
+
+    color:#0d6efd;
+
+    margin-bottom:15px;
+}
+
+.card-header h2{
+
+    color:#fff;
+
+    font-size:32px;
+
+    margin-bottom:10px;
+}
+
+.card-header p{
+
+    color:#b8c1cc;
+
+    font-size:15px;
+}
+
+/* الحقول */
+
+.form-group{
+
+    margin-bottom:22px;
+}
+
+.form-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#fff;
+
+    font-size:15px;
+}
+
+.form-control{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border-radius:10px;
+
+    border:1px solid #32455d;
+
+    background:#1d3146;
+
+    color:#fff;
+
+    font-size:15px;
+
+    box-sizing:border-box;
+}
+
+.form-control:focus{
+
+    outline:none;
+
+    border-color:#0d6efd;
+
+    box-shadow:0 0 10px rgba(13,110,253,.25);
+}
+
+/* الزر */
+
+.save-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#0d6efd;
+
+    color:#fff;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    margin-top:10px;
+}
+
+.save-btn:hover{
+
+    background:#0b5ed7;
+
+    transform:translateY(-2px);
+}
+
+.change{
+  background: #fff;
+ justify-content: center;
+ align-items: center;
+ margin: auto;
+ width: 50%;
+ height: 80%;
+ padding: 35px;
+ border-radius: 18px;
+
+}
+
+.change h1{
+  color: #0481ff;
+  text-align: center;
+  padding-bottom: 15px;
+}
+.change label{
+  color:#0481ff ;
+  margin-right: 80px;
+  width: 120px;
+ 
+}
+
+.change input{
+  width:300px;
+  
+}
+/* زرار تغيير كلمة المرور */
+button[type="submit"] {
+  background: #198754 !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  padding: 12px !important;
+  border: none !important;
+  border-radius: 6px !important;
+  width: 22%;
+  margin-right: 280px;
+  transition: 0.5s;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background: #187348 !important;
+}
+
+.form-group{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+
+}

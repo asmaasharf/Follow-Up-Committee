@@ -1,0 +1,666 @@
+
+<link rel="stylesheet" href="/stylesheets/views/users/manageUsers.css">
+<!--- dashboard--->
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="5.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>document</title>
+
+</head>
+<body class="body-main">
+    <div class="menu">
+        <ul>
+            <li class="profile">
+                <div class="img-box">
+                   <img src="/images/صورة للموقع 2.jfif" alt="">
+                </div>
+
+                <div class="user-info">
+                    <div class="short-name">{{user.username}}</div>
+
+                    <div class="full-name">{{user.fullname}}</div>
+
+                <p class="user-role">
+                        {{user.jobTitle}}
+                </p>
+                <a href="/users/change-password" class="change-password">
+    
+                        <span>تغيير كلمة المرور</span>
+                </a>
+
+                </div>
+            </li>
+
+          
+            <!---اول قائمة تحت اسم البروفايل--->
+       
+            {{#if isAdmin}}
+            <li>
+                <a href="/users/manage-users">
+                <i class="fa-solid fa-users"></i>
+                <p>إدارة المستخدمين</p>
+                </a>
+            </li>
+            {{/if}}
+             <!---- ثاني قائمه--->
+
+            <li>
+                <a href="/">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <p>إضافة مشكلة جديدة</p>
+                </a>
+            </li>
+
+
+             <!---- ثالث قائمه--->
+
+            <li>
+                <a href="/technicalNotes">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <p>توضيح نقاط فنية</p>
+                </a>
+            </li>
+            <!---- رابع قائمه--->
+
+            <li>
+                <a href="/inquiries">
+                    <i class="fa-solid fa-comments"></i>
+                    <p>الاستفسارات</p>
+                </a>
+            </li>
+
+            {{!-- خامس قائمة --}}
+
+            <li>
+                <a href="/reports">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <p>التقارير</p>
+                </a>
+            </li>
+             
+
+        
+             <!---- سادس قائمه--->
+
+            <li class="log-out">
+                 <a href="/users/logout">
+                    <i class="fas fa-sign-out"></i>
+                    <p>تسجيل خروج </p>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="title-info">
+            <p>لجنة متابعة اداء المراكز التكنولوجية بالمحافظة</p>
+            <i class="fas fa-chart-bar"></i>
+        </div>
+
+
+<div class="content-user-manage">
+    <div class="page-header">
+
+    <h2> إدارة المستخدمين</h2>
+
+    <p>إدارة الحسابات ومجموعات العمل وصلاحيات المستخدمين</p>
+
+    </div>
+
+    {{!-- الكروت --}}
+    <div class="users-stats">
+
+    <div class="stat-card pending">
+
+        <div class="stat-icon">
+    <i class="fa-solid fa-user-clock"></i>
+</div>
+
+<h3>طلبات التسجيل</h3>
+
+<span>{{pendingUsers.length}}</span>
+
+    </div>
+
+    <div class="stat-card active">
+
+        <div class="stat-icon">
+    <i class="fa-solid fa-users"></i>
+</div>
+
+<h3>الحسابات النشطة</h3>
+
+<span>{{activeCount}}</span>
+
+    </div>
+
+    <div class="stat-card inactive">
+
+        <div class="stat-icon">
+    <i class="fa-solid fa-user-lock"></i>
+</div>
+
+<h3>الحسابات الموقوفة</h3>
+
+<span>{{inactiveCount}}</span>
+
+    </div>
+
+</div>
+
+{{!-- جدول انشاء الحساب والمستخدمين المعتمدين --}}
+<div class="users-page">
+
+{{!-- //   جدول طلبات انشاء  الحساب pending--}}
+<div class="card">
+
+    <h2 class="card-title">
+
+        طلبات إنشاء الحساب
+
+    </h2>
+
+<table  class="manageUsers-table">
+
+    <tr>
+    <th>الاسم بالكامل</th>
+    <th>اسم المستخدم</th>
+    <th>المركز</th>
+    <th>الوظيفة</th>
+    <th>رقم الهاتف</th>
+    <th>الحالة</th>
+    <th>تاريخ التسجيل</th>
+    <th>الإجراءات</th>
+    </tr>
+    
+
+    {{#each pendingUsers}}
+
+   <tr>
+
+    <td>{{fullName}}</td>
+
+    <td>{{username}}</td>
+
+    <td>{{city}}</td>
+
+    <td>{{jobTitle}}</td>
+
+    <td>{{phone}}</td>
+
+    <td>
+
+<span class="badge bg-warning text-dark">
+
+    {{status}}
+
+</span>
+
+</td>
+
+    <td>{{formatDate createdAt}}</td>
+
+    <td>
+
+   <select class="form-control role-select" id="role-{{_id}}">
+
+        <option value="">اختر مجموعة العمل</option>
+
+        {{#each ../roles}}
+
+            <option value="{{_id}}">
+                {{roleName}}
+            </option>
+
+        {{/each}}
+
+    </select>
+
+    <br>
+
+    <button
+        class="approve-btn"
+        data-id="{{_id}}">
+        موافقة
+    </button>
+
+    <button
+        class="reject-btn"
+        data-id="{{_id}}">
+        رفض
+    </button>
+
+</td>
+
+</tr>
+    {{/each}}
+
+</table>
+</div>
+
+{{!-- //   جدول المستخدمون المعتمدون  ال approved--}}
+<div class="card">
+
+    <h2 class="card-title">
+
+        المستخدمون المعتمدون
+
+    </h2>
+<table class="approved-table">
+
+    <tr>
+        <th>الاسم بالكامل</th>
+        <th>اسم المستخدم</th>
+        <th>المركز</th>
+        <th>الوظيفة</th>
+        <th>رقم الهاتف</th>
+        <th>مجموعة العمل</th>
+        <th>الحالة</th>
+        <th>تاريخ التسجيل</th>
+        <th>الإجراءات</th>
+    </tr>
+
+    {{#each approvedUsers}}
+
+    <tr>
+
+        <td>{{fullName}}</td>
+
+        <td>{{username}}</td>
+
+        <td>{{city}}</td>
+
+        <td>{{jobTitle}}</td>
+
+        <td>{{phone}}</td>
+
+<td>
+
+{{#ifEquals _id ../currentUser._id}}
+
+    <span class="badge bg-secondary">
+        {{role.roleName}}
+    </span>
+
+{{else}}
+
+    <select class="form-control role-select" id="change-role-{{_id}}">
+
+        {{#with role}}
+
+            {{#each ../../roles}}
+
+                <option
+                    value="{{_id}}"
+
+                    {{#ifEquals _id ../_id}}
+                        selected
+                    {{/ifEquals}}
+
+                >
+                    {{roleName}}
+                </option>
+
+            {{/each}}
+
+        {{/with}}
+
+    </select>
+
+{{/ifEquals}}
+
+</td>
+
+       <td>
+
+{{#ifEquals status "Active"}}
+
+<span class="badge bg-success">
+    Active
+</span>
+
+{{else}}
+
+<span class="badge bg-danger">
+    Inactive
+</span>
+
+{{/ifEquals}}
+
+</td>
+
+        <td>{{formatDate createdAt}}</td>
+
+        
+
+        {{!--عمود الاجراءات --}}
+ {{!-- عمود الإجراءات --}}
+<td>
+
+{{#ifEquals _id ../currentUser._id}}
+
+    <span>-</span>
+
+{{else}}
+
+    <button
+        class="save-role-btn"
+        data-id="{{_id}}">
+        حفظ
+    </button>
+
+    {{#ifEquals status "Active"}}
+
+        <button
+            class="toggle-status-btn"
+            data-id="{{_id}}"
+            data-status="{{status}}">
+            إيقاف الحساب
+        </button>
+
+    {{else}}
+
+        <button
+            class="toggle-status-btn"
+            data-id="{{_id}}"
+            data-status="{{status}}">
+            تفعيل الحساب
+        </button>
+
+    {{/ifEquals}}
+
+{{/ifEquals}}
+
+</td>
+
+    </tr>
+
+    {{/each}}
+
+    </table>
+</div>
+
+<div class="pagination">
+
+    {{#if hasPrevPage}}
+
+        <a href="/users/manage-users?page={{prevPage}}" class="btn btn-secondary">
+
+            السابق
+
+        </a>
+
+    {{/if}}
+
+    <span>
+
+        الصفحة {{currentPage}} من {{totalPages}}
+
+    </span>
+
+    {{#if hasNextPage}}
+
+        <a href="/users/manage-users?page={{nextPage}}" class="btn btn-secondary">
+
+            التالي
+
+        </a>
+
+    {{/if}}
+
+</div>
+
+</div>
+
+</div>
+   {{!-- //نهاية الجدولين المستخدمين المعتمدين وانشاء الحساب // --}}
+
+{{!-- ملف الجافا سكريبت --}}
+
+<script>
+
+// زر موافق لاعتماد المستخدم 
+document.querySelectorAll('.approve-btn').forEach(button => {
+
+    button.addEventListener('click', function (event) {
+
+    event.preventDefault();
+
+        const userId = this.dataset.id;
+
+        const roleId = document.getElementById('role-' + userId).value;
+
+        if (roleId === '') {
+
+            alert('اختر مجموعة العمل أولاً');
+
+            return;
+
+        }
+
+        fetch('/users/approve-user/' + userId, {
+
+            method: 'PUT',
+
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                role: roleId
+            })
+
+        })
+
+        .then(res => res.json())
+
+        .then(result => {
+            if (result.success) {
+
+            alert(result.message);
+
+           location.reload();
+
+        } else {
+
+                alert('حدث خطأ');
+
+            }
+
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+        });
+
+    });
+
+});
+
+
+// زر رفض المستخدم
+
+document.querySelectorAll('.reject-btn').forEach(button => {
+
+    button.addEventListener('click', function (event) {
+
+        event.preventDefault();
+
+        const userId = this.dataset.id;
+
+        if (!confirm('هل تريد رفض طلب إنشاء هذا المستخدم؟')) {
+
+            return;
+
+        }
+
+        fetch('/users/reject-user/' + userId, {
+
+            method: 'PUT'
+
+        })
+
+        .then(res => res.json())
+
+        .then(result => {
+
+            if (result.success) {
+
+                alert(result.message);
+
+                this.closest('tr').remove();
+
+            } else {
+
+                alert('حدث خطأ');
+
+            }
+
+        })
+
+        .catch(err => {
+
+            console.log(err);
+
+        });
+
+    });
+
+});
+
+// زر حفظ بعد تغيير ال role من خلال الادمن ،، نغير اليوزر ل ادمن او العكس
+
+document.querySelectorAll('.save-role-btn').forEach(button => {
+
+    button.addEventListener('click', async function () {
+
+        const userId = this.dataset.id;
+
+        const roleId = document.getElementById('change-role-' + userId).value;
+
+        if (!confirm('هل تريد تغيير مجموعة العمل؟')) {
+
+            return;
+
+        }
+
+        try {
+
+            const res = await fetch('/users/change-role', {
+
+                method: 'PUT',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+
+                    userId,
+
+                    roleId
+
+                })
+
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+
+                alert(result.message);
+
+                location.reload();
+
+            } else {
+
+                alert(result.message);
+
+            }
+
+        } catch (err) {
+
+            console.log(err);
+
+            alert('حدث خطأ');
+
+        }
+
+    });
+
+});
+
+
+// زر إيقاف / تفعيل الحساب
+
+document.querySelectorAll('.toggle-status-btn').forEach(button => {
+
+    button.addEventListener('click', async function () {
+
+        const userId = this.dataset.id;
+
+        const currentStatus = this.dataset.status;
+
+        const action = currentStatus === 'Active'
+            ? 'إيقاف'
+            : 'تفعيل';
+
+        if (!confirm(`هل تريد ${action} هذا الحساب؟`)) {
+
+            return;
+
+        }
+
+        try {
+
+            const res = await fetch('/users/toggle-status', {
+
+                method: 'PUT',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({
+
+                    userId,
+
+                    currentStatus
+
+                })
+
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+
+                alert(result.message);
+
+                location.reload();
+
+            } else {
+
+                alert(result.message);
+
+            }
+
+        } catch (err) {
+
+            console.log(err);
+
+            alert('حدث خطأ');
+
+        }
+
+    });
+
+});
+
+</script>

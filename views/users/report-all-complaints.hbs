@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="/stylesheets/views/users/report-all-complaints.css">
+
+{{#each pages}}
+
+<div class="report-page">
+
+    <!-- Header -->
+    <div class="report-header">
+
+        <div class="image-title">
+
+            <img src="/images/لوجو اللجنة (2).jpg" alt="شعار اللجنة">
+
+            <img src="/images/لوجو المحافظة.jpg" alt="شعار المحافظة">
+
+        </div>
+
+        <div class="title">
+
+            <h3>محافظة البحيرة</h3>
+
+            <h4>لجنة متابعة المراكز التكنولوجية</h4>
+
+        </div>
+
+        <div class="report-title">
+            <h2>{{../reportTitle}}</h2>
+
+            {{#if ../fromDate}}
+                <h5 class="report-period">
+                خلال الفترة من {{../fromDate}}
+                إلى {{../toDate}}
+                </h5>
+            {{/if}}
+        </div>
+
+    </div>
+
+
+    <!-- Table -->
+    <table dir="rtl">
+
+        <thead>
+
+            <tr>
+
+                <th>م</th>
+                <th>المركز</th>
+                <th>اسم المستخدم</th>
+                <th>رقم المعاملة</th>
+                <th>كود الخدمة</th>
+
+                {{#if ../showReplyStatus}}
+                    <th>الحالة</th>
+                {{/if}}
+
+
+
+                {{#if ../showReplyOfficer}}
+                <th>مسؤول الرد</th>
+                {{/if}}
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {{#each rows}}
+
+            <tr>
+
+               <td>{{add @index ../start}}</td>
+
+                <td>{{city}}</td>
+
+                <td>{{createdBy.username}}</td>
+
+                <td>{{transactionnumber}}</td>
+
+                <td>{{servicecode}}</td>
+
+                {{#if ../../showReplyStatus}}
+                <td>{{status}}</td>
+                    
+                {{/if}}
+
+                {{#if ../../showReplyOfficer}}
+
+                <td>{{responseperson}}</td>
+
+                {{/if}}
+
+            </tr>
+
+            {{/each}}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{{/each}}
+
+
+<div class="report-footer">
+
+    <div class="report-total">
+        <strong>الإجمالي:</strong>
+        {{complaints.length}}
+    </div>
+
+    <div class="page-count">
+        <strong>عدد الصفحات:</strong>
+        {{totalPages}}
+    </div>
+
+    <div class="print-date">
+        <strong>تاريخ الطباعة:</strong>
+        {{printDate}}
+    </div>
+
+</div>
