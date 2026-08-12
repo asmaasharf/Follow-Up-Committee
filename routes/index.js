@@ -109,7 +109,15 @@ router.get('/', auth.isLoggedIn,  auth.isActive, function(req, res, next) {
 });
 
 
-router.post('/users/submit-form', auth.isLoggedIn, auth.isActive, upload.single('image'), uploadError, (req, res, next)=>{
+router.post('/users/submit-form', 
+    auth.isLoggedIn, 
+    auth.isActive, 
+    upload.single('image'), 
+    uploadError, 
+    (req, res, next)=>{
+
+        console.log("UPLOAD PATH:", uploadPath);
+console.log("FILE:", req.file);
 
     const newForm = new formSchema ({
     
