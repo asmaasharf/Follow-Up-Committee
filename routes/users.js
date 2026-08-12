@@ -88,7 +88,7 @@ check('password')
 check('confirm-password')
 .custom((value, {req})=>{
     if ( value !== req.body.password){
-        throw new Error('كلمة المرور وتأكيد كلمة المرور غير متطابقين')
+        throw new Error('كلمتاالمرور غير متطابقين')
     }
     return true ;
     })
@@ -121,7 +121,7 @@ User.findOne({ nationalId: req.body.nationalId })
 
     if (user) {
 
-             res.render('users/signup', {
+            return res.render('users/signup', {
 
                 validationMessages: ['الرقم القومي مسجل بالفعل'],
 
@@ -131,9 +131,9 @@ User.findOne({ nationalId: req.body.nationalId })
 
             });
 
-            return null;
 
         }
+// البحث عن اسم المستخدم داخل نفس المركز
 
        return User.findOne({
             username : req.body.username,
@@ -142,9 +142,10 @@ User.findOne({ nationalId: req.body.nationalId })
     })
 
     .then(user=>{
+
         if (user){
 
-             res.render('users/signup', {
+            return res.render('users/signup', {
 
                 validationMessages: ['اسم المستخدم موجود بالفعل داخل المركز'],
 
@@ -153,8 +154,6 @@ User.findOne({ nationalId: req.body.nationalId })
                 oldInput: req.body
 
             });
-
-            return null ;
 
         }
    
@@ -181,15 +180,23 @@ User.findOne({ nationalId: req.body.nationalId })
 
 })
 
-.then(() => {
+.then(result => {
 
-    res.redirect('signin');
+    if (!result){
+        return ;
+    }
+
+   return res.redirect('signin');
 
 })
 
 .catch(err => {
 
     console.log(err);
+
+    if (res.headersSent){
+        return;
+    }
 
     res.render('users/signup', {
 
@@ -213,10 +220,10 @@ router.get('/signin', function(req, res, next) {
 });
 
 
-
 router.post('/signin', [
-  // check('city')
-  // .notEmpty().withMessage('اختار المركز والمدينة'),
+
+  check('city')
+    .notEmpty().withMessage('اختار المركز والمدينة'),
 
   check('username')
     .notEmpty().withMessage('اسم المستخدم مطلوب'),
@@ -224,12 +231,14 @@ router.post('/signin', [
   check('password')
     .notEmpty().withMessage('كلمة المرور مطلوبة')
 
-], (req, res, next) => {  
-    
+], (req, res, next) => {
+
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+
     const validationMessages = [];
+
     errors.array().forEach(error => {
       validationMessages.push(error.msg);
     });
@@ -239,198 +248,219 @@ router.post('/signin', [
       hasErrors: true,
       oldInput: req.body
     });
-  } // ← قفلة الـ if (!errors.isEmpty())
 
-  // غلط تدوري بالباسورد عشان متشفر. دوري باليوزر بس
+  }
+
+  // البحث عن المستخدم بالمركز + اسم المستخدم
   User.findOne({
-    username: req.body.username
-})
-.populate('role')
-    .then(user => {   // ← بداية الـ then بتاع findOne
-      if (!user) {
+    username: req.body.username,
+    // city: req.body.city
+  })
+
+  .populate('role')
+
+  .then(user => {
+
+    // المستخدم غير موجود
+    if (!user) {
+
+      return res.render('users/signin', {
+        validationMessages: [
+          'خطأ في المركز أو اسم المستخدم أو كلمة المرور'
+        ],
+        hasErrors: true,
+        oldInput: req.body
+      });
+
+    }
+
+    // التحقق من كلمة المرور
+    return bcrypt.compare(req.body.password, user.password)
+
+    .then(doMatch => {
+
+      // كلمة المرور غلط
+      if (!doMatch) {
+
         return res.render('users/signin', {
-          validationMessages: ['خطأ في اسم المستخدم أو كلمة المرور'],
+          validationMessages: [
+            'خطأ في المركز أو اسم المستخدم أو كلمة المرور'
+          ],
           hasErrors: true,
           oldInput: req.body
         });
+
       }
-      
-      bcrypt.compare(req.body.password, user.password)
-        .then(doMatch => {   // ← بداية الـ then بتاع compare
-          if (!doMatch) {
-            return res.render('users/signin', {
-              validationMessages: ['خطأ في اسم المستخدم أو كلمة المرور'],
-              hasErrors: true,
-              oldInput: req.body
-            });
-          }
 
-            // التحقق من حالة الحساب
-    if (user.status === 'Pending') {
+      // الحساب Pending
+      if (user.status === 'Pending') {
 
         return res.render('users/signin', {
-            validationMessages: ['حسابك قيد المراجعة، يرجى انتظار موافقة المسؤول'],
-            hasErrors: true,
-            oldInput: req.body
+          validationMessages: [
+            'حسابك قيد المراجعة، يرجى انتظار موافقة المسؤول'
+          ],
+          hasErrors: true,
+          oldInput: req.body
         });
 
-    }
+      }
 
-    if (user.status === 'Rejected') {
+      // الحساب Rejected
+      if (user.status === 'Rejected') {
 
         return res.render('users/signin', {
-            validationMessages: ['تم رفض طلب إنشاء الحساب، يرجى التواصل مع المسؤول'],
-            hasErrors: true,
-            oldInput: req.body
+          validationMessages: [
+            'تم رفض طلب إنشاء الحساب، يرجى التواصل مع المسؤول'
+          ],
+          hasErrors: true,
+          oldInput: req.body
         });
 
+      }
+
+      // الحساب Inactive
+      if (user.status === 'Inactive') {
+
+        return res.render('users/signin', {
+          validationMessages: [
+            'هذا الحساب موقوف، يرجى التواصل مع المسؤول'
+          ],
+          hasErrors: true,
+          oldInput: req.body
+        });
+
+      }
+
+      // الحساب Active
+      req.session.isLoggedIn = true;
+
+      req.session.user = user;
+
+      return req.session.save(err => {
+
+        if (err) {
+
+          console.log(err);
+
+          return res.status(500).send(
+            'حدث خطأ أثناء تسجيل الدخول'
+          );
+
+        }
+
+        return res.redirect('/');
+
+      });
+
+    });
+
+  })
+
+  .catch(err => {
+
+    console.log(err);
+
+    if (res.headersSent) {
+      return;
     }
 
-    // لو الحساب Active
-          req.session.isLoggedIn = true;
-          req.session.user = user;
-          return req.session.save(err => {
-            res.redirect('/');
-          });
+    res.status(500).send(
+      'حدث خطأ أثناء تسجيل الدخول'
+    );
 
-        }) // ← قفلة الـ then بتاع bcrypt.compare
-        .catch(err => console.log(err));
-        
-    }) // ← قفلة الـ then بتاع User.findOne
-    .catch(err => console.log(err));
+  });
 
-}); 
+});    
+
 
 
 // صفحة ادارة المستخدمين 
 
-router.get('/manage-users', auth.isLoggedIn, auth.isAdmin, (req, res, next) => {
+// صفحة إدارة المستخدمين
 
-    const page = parseInt(req.query.page) || 1;
+router.get('/manage-users',
+    auth.isLoggedIn,
+    auth.isActive,
+    auth.isAdmin,
+    (req, res, next) => {
 
-    const limit = 10;
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page - 1) * limit;
 
-    const skip = (page - 1) * limit;
+        Role.find()
 
-    Role.find()
+        .then(roles => {
 
-    .then(roles => {
+            return User.find({ status: 'Pending' })
+                .populate('role')
+                .sort({ createdAt: -1 })
 
-        User.find({ status: 'Pending' })
+            .then(pendingUsers => {
 
-        .populate('role')
-
-        .sort({ createdAt: -1 })
-
-        .then(pendingUsers => {
-
-            User.countDocuments({
-
-                status: { $in: ['Active', 'Inactive'] }
-
-            })
-
-            .then(totalUsers => {
-
-                User.countDocuments({
-
-                    status: 'Active'
-
+                return User.countDocuments({
+                    status: { $in: ['Active', 'Inactive'] }
                 })
 
-                .then(activeCount => {
+                .then(totalUsers => {
 
-                    User.countDocuments({
-
-                        status: 'Inactive'
-
+                    return User.countDocuments({
+                        status: 'Active'
                     })
 
-                    .then(inactiveCount => {
+                    .then(activeCount => {
 
-                        User.find({
-
-                            status: { $in: ['Active', 'Inactive'] }
-
+                        return User.countDocuments({
+                            status: 'Inactive'
                         })
 
-                        .populate('role')
+                        .then(inactiveCount => {
 
-                        .sort({ createdAt: -1 })
+                            return User.find({
+                                status: { $in: ['Active', 'Inactive'] }
+                            })
+                            .populate('role')
+                            .sort({ createdAt: -1 })
+                            .skip(skip)
+                            .limit(limit)
 
-                        .skip(skip)
+                            .then(approvedUsers => {
 
-                        .limit(limit)
+                                const totalPages =
+                                    Math.ceil(totalUsers / limit);
 
-                        .then(approvedUsers => {
+                                return res.render(
+                                    'users/manageUsers',
+                                    {
+                                        roles,
+                                        pendingUsers,
+                                        approvedUsers,
+                                        activeCount,
+                                        inactiveCount,
 
-                            const totalPages = Math.ceil(totalUsers / limit);
+                                        currentUser:
+                                            req.session.user,
 
-                            res.render('users/manageUsers', {
+                                        currentPage: page,
+                                        totalPages,
 
-                                roles,
+                                        hasPrevPage: page > 1,
 
-                                pendingUsers,
+                                        hasNextPage:
+                                            page < totalPages,
 
-                                approvedUsers,
-
-                                activeCount,
-
-                                inactiveCount,
-
-                                currentUser: req.session.user,
-
-                                currentPage: page,
-
-                                totalPages,
-
-                                hasPrevPage: page > 1,
-
-                                hasNextPage: page < totalPages,
-
-                                prevPage: page - 1,
-
-                                nextPage: page + 1
+                                        prevPage: page - 1,
+                                        nextPage: page + 1
+                                    }
+                                );
 
                             });
 
-                        })
-
-                        .catch(err => {
-
-                            console.log(err);
-
-                            next(err);
-
                         });
-
-                    })
-
-                    .catch(err => {
-
-                        console.log(err);
-
-                        next(err);
 
                     });
 
-                })
-
-                .catch(err => {
-
-                    console.log(err);
-
-                    next(err);
-
                 });
-
-            })
-
-            .catch(err => {
-
-                console.log(err);
-
-                next(err);
 
             });
 
@@ -439,30 +469,21 @@ router.get('/manage-users', auth.isLoggedIn, auth.isAdmin, (req, res, next) => {
         .catch(err => {
 
             console.log(err);
-
             next(err);
 
         });
 
-    })
-
-    .catch(err => {
-
-        console.log(err);
-
-        next(err);
-
-    });
-
-});
-
+    }
+);
 
 
 // اعتماد مستخدم
 
-router.put('/approve-user/:id', auth.isLoggedIn,
-
-    auth.isAdmin, (req, res, next) => {
+router.put('/approve-user/:id',
+    auth.isLoggedIn,
+    auth.isActive,
+    auth.isAdmin,
+     (req, res, next) => {
 
     User.findByIdAndUpdate(
 
@@ -485,12 +506,12 @@ router.put('/approve-user/:id', auth.isLoggedIn,
 
             return res.status(404).json({
                 success: false,
-                message: 'User Not Found'
+                message: 'المستخدم غير موجود'
             });
 
         }
 
-        res.json({
+        return res.json({
             success: true,
             message: 'تم اعتماد المستخدم'
         });
@@ -502,7 +523,9 @@ router.put('/approve-user/:id', auth.isLoggedIn,
         console.log(err);
 
         res.status(500).json({
-            success: false
+            success: false,
+             message: 'حدث خطأ أثناء اعتماد المستخدم'
+
         });
 
     });
@@ -512,7 +535,11 @@ router.put('/approve-user/:id', auth.isLoggedIn,
 
 // رفض مستخدم
 
-router.put('/reject-user/:id', (req, res, next) => {
+router.put('/reject-user/:id',
+    auth.isLoggedIn,
+    auth.isActive,
+    auth.isAdmin,
+    (req, res, next) => {
 
     User.findByIdAndUpdate(
 
@@ -532,12 +559,12 @@ router.put('/reject-user/:id', (req, res, next) => {
 
             return res.status(404).json({
                 success: false,
-                message: 'User Not Found'
+                message: 'المستخدم غير موجود'
             });
 
         }
 
-        res.json({
+        return res.json({
             success: true,
             message: 'تم رفض طلب إنشاء الحساب'
         });
@@ -549,7 +576,8 @@ router.put('/reject-user/:id', (req, res, next) => {
         console.log(err);
 
         res.status(500).json({
-            success: false
+            success: false,
+            message: 'حدث خطأ أثناء رفض المستخدم'
         });
 
     });
@@ -559,7 +587,9 @@ router.put('/reject-user/:id', (req, res, next) => {
 // تسجيل خروج
 
 
-router.get('/logout', (req, res, next) => {
+router.get('/logout',
+    auth.isLoggedIn,
+    (req, res, next) => {
 
     req.session.destroy(err => {
 
@@ -571,7 +601,7 @@ router.get('/logout', (req, res, next) => {
 
         }
 
-        res.redirect('/users/signin');
+        return res.redirect('/users/signin');
 
     });
 
@@ -580,7 +610,11 @@ router.get('/logout', (req, res, next) => {
 
 // راوتر تغيير ال role
 
-router.put('/change-role', auth.isLoggedIn, auth.isAdmin, (req, res) => {
+router.put('/change-role',
+    auth.isLoggedIn,
+    auth.isActive,
+    auth.isAdmin,
+    (req, res) => {
 
     const { userId, roleId } = req.body;
 
@@ -609,7 +643,16 @@ router.put('/change-role', auth.isLoggedIn, auth.isAdmin, (req, res) => {
 
     .then(updatedUser => {
 
-        res.json({
+
+        if (!updatedUser) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: 'المستخدم غير موجود'
+                });
+         }
+
+       return res.json({
 
             success: true,
 
@@ -623,7 +666,7 @@ router.put('/change-role', auth.isLoggedIn, auth.isAdmin, (req, res) => {
 
         console.log(err);
 
-        res.status(500).json({
+       return res.status(500).json({
 
             success: false,
 
@@ -637,7 +680,11 @@ router.put('/change-role', auth.isLoggedIn, auth.isAdmin, (req, res) => {
 
 // راوتر ايقاف او تفعيل الحساب
 
-router.put('/toggle-status', auth.isLoggedIn, auth.isAdmin, (req, res) => {
+router.put('/toggle-status',
+    auth.isLoggedIn,
+    auth.isActive,
+    auth.isAdmin,
+    (req, res) => {
 
     const { userId, currentStatus } = req.body;
 
@@ -668,9 +715,18 @@ router.put('/toggle-status', auth.isLoggedIn, auth.isAdmin, (req, res) => {
 
     )
 
-    .then(() => {
+    .then(updatedUser => {
 
-        res.json({
+         if (!updatedUser) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: 'المستخدم غير موجود'
+                });
+
+            }
+
+       return res.json({
 
             success: true,
 
@@ -701,11 +757,14 @@ router.put('/toggle-status', auth.isLoggedIn, auth.isAdmin, (req, res) => {
 
 // تغيير كلمة المرور 
 
-router.get('/change-password', auth.isLoggedIn, (req, res, next)=>{
+router.get('/change-password', auth.isLoggedIn, auth.isActive, (req, res, next)=>{
     res.render('users/changePassword')
 })
 
-router.post('/change-password' , auth.isLoggedIn, async(req, res, next)=>{
+router.post('/change-password' ,
+    auth.isLoggedIn,
+    auth.isActive,
+    async(req, res, next)=>{
 
     try{
 

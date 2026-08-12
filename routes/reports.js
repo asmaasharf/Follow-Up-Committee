@@ -31,7 +31,7 @@ function preparePages(data, pageSize = 20) {
 
 
 
-router.get('/', auth.isLoggedIn, (req, res, next) => {
+router.get('/', auth.isLoggedIn, auth.isActive, (req, res, next) => {
 
     formSchema.find()
 
@@ -82,11 +82,11 @@ router.get('/', auth.isLoggedIn, (req, res, next) => {
 
 });
 
-
+// راوتر عرض التقارير
 // راوتر تقرير المشاكل المطروحة 
 
 // بيان عدد المشاكل المطروحه
-router.get('/view', auth.isLoggedIn, (req, res, next)=>{
+router.get('/view', auth.isLoggedIn, auth.isActive, (req, res, next)=>{
 
     const reportType = req.query.reportType
 
@@ -401,10 +401,8 @@ else if (
 
     reportType === 'committeeSolved' ||
     reportType === 'committeeSolvedPeriod' ||
-    reportType === 'userApprovalOfficer' || 
-    reportType === 'responseOfficer'  
-
-
+    reportType === 'userApprovalOfficer' 
+   
 ){
 
     if(req.session.user.role.roleName !== 'Admin'){
@@ -619,9 +617,6 @@ else if (reportType === "userApprovalOfficer") {
 
         }
      
-
-
-
 })
 
 

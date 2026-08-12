@@ -7,7 +7,7 @@ const inquirySchema = require('../models/inquirySchema')
 
 // راوتر الاستفسارات 
 
-router.get('/', auth.isLoggedIn, (req, res, next) => {
+router.get('/', auth.isLoggedIn, auth.isActive, (req, res, next) => {
 
     const page = parseInt(req.query.page) || 1
     const limit = 10;
@@ -80,7 +80,7 @@ router.get('/', auth.isLoggedIn, (req, res, next) => {
 
 // راوتر حفظ الاستفسارات 
 
-router.post('/addInquiry', auth.isLoggedIn, (req, res, next) => {
+router.post('/addInquiry', auth.isLoggedIn, auth.isActive, (req, res, next) => {
 
     const inquiry = new inquirySchema({
 
@@ -140,7 +140,11 @@ router.post('/addInquiry', auth.isLoggedIn, (req, res, next) => {
 
 // راوتر التعد يل الخاص برد الادمن ع الاستفسار 
 
-router.put('/replyInquiry/:id', auth.isLoggedIn, auth.isAdmin, (req, res, next) => {
+router.put('/replyInquiry/:id',
+     auth.isLoggedIn,
+      auth.isActive, 
+       auth.isAdmin, 
+       (req, res, next) => {
 
     inquirySchema.findByIdAndUpdate(
 
@@ -213,7 +217,7 @@ router.put('/replyInquiry/:id', auth.isLoggedIn, auth.isAdmin, (req, res, next) 
 
 // راوتر التعديل الخاص باليوزر 
 
-router.put('/updateInquiry/:id', auth.isLoggedIn, (req, res, next) => {
+router.put('/updateInquiry/:id', auth.isLoggedIn, auth.isActive, (req, res, next) => {
 
     inquirySchema.findById(req.params.id)
 
@@ -303,7 +307,7 @@ router.put('/updateInquiry/:id', auth.isLoggedIn, (req, res, next) => {
 
 // راوتر الحذف الخاص باليوزر 
 
-router.delete('/deleteInquiry/:id', auth.isLoggedIn, async (req, res) => {
+router.delete('/deleteInquiry/:id', auth.isLoggedIn, auth.isActive, async (req, res) => {
 
     try {
 

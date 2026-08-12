@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
 
     city : {
         type : String,
@@ -18,29 +18,31 @@ const userSchema = mongoose.Schema({
 nationalId: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
 },
 
 phone: {
     type: String,
-    required: true
+    required: true,
+    trim: true
 },
 
 jobTitle: {
     type: String,
-    required: true
+    required: true,
 },
-    username : {
-        type : String,
-        required : true,
-        trim : true
+username : {
+    type : String,
+    required : true,
+    trim : true
     },
-    password : {
+password : {
         type : String,
         required : true,
     
     },
-    role : {
+role : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Role',
         // required : true,
@@ -71,11 +73,16 @@ jobTitle: {
 
    
 }, {timestamps : true})
+
+userSchema.index(
+    {username : 1, city : 1},
+    {unique : true}
+);
 userSchema.methods.hashPassword = function(password){
     return bcrypt.hashSync(password, bcrypt.genSaltSync(12))
-}
+};
 userSchema.methods.comparePassword = function(password){
     return bcrypt.compare(password, this.password)
-}
+};
 
 module.exports = mongoose.model('User', userSchema)

@@ -1,8 +1,19 @@
 
-
+# Node Modules
 node_modules/
+
+# Enviroment Files
 .env
+.env.*
+
+# Logs
 *.log
+
+# Vs Code
 .vscode/
+
+#Uploaded File
 public/uploads/
+
+# Backups
 Backups/

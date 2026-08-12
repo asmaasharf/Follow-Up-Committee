@@ -1,5 +1,7 @@
+
 const mongoose = require('mongoose')
-const formSchema = mongoose.Schema({
+const formSchema = new mongoose.Schema({
+
     city : {
         type : String,
         required : true
@@ -50,17 +52,20 @@ responseperson: {
 
     replyBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    default: null
     },
 
    createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    default: null
     //required: true  هيتم تفعيلها بعد نهاية المشروع بعد ما امسح قاعدة البيانات ال موجودة 
 },
 
     replyDate: {
-    type: Date
+    type: Date,
+    default: null
     },
 
    replyStatus: {

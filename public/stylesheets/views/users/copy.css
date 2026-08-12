@@ -12,7 +12,8 @@ body {
   background-color:#001 ;
   min-height: 100vh;
   margin: 0;
-  padding: 20px;
+  padding:0;
+    overflow-x:hidden;
 }
 
 .body-main {
@@ -24,14 +25,6 @@ body {
 }
 
 
-.user-name{
-    position: relative;
-    display: inline-block;
-    color: #fff;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
 
 .full-name{
     visibility: hidden;
@@ -52,7 +45,7 @@ body {
     z-index: 1000;
 }
 
-.user-name:hover .full-name{
+.full-name :hover {
     visibility: visible;
     opacity: 1;
 }
@@ -62,7 +55,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 20px 0;
+    padding: 20px 0 0px 0;
 }
 
 .user-info{
@@ -88,22 +81,6 @@ body {
     height:100%;
     object-fit:cover;
 }
-
-/* .user-name{
-    color:#fff;
-    font-size:22px;
-    font-weight:700;
-    text-align:center;
-    line-height:1.4;
-    max-width:180px;
-    margin-bottom:5px;
-}
-
-.user-role{
-    color:#bdbdbd;
-    font-size:15px;
-    margin:0;
-} */
 
 
 .user-role{
@@ -131,25 +108,24 @@ body {
     width: 160px;
     height: 100vh;
     background-color: #123;
-    padding: 20px;
+    padding: 25px;
     overflow: hidden;
     transition: width .5s;
     z-index: 1000;
 }
 
-.menu:hover{
-    width:260px;
-}
 
 .menu:hover{
     width: 260px;
 }
+
+
 ul{
     list-style: none;
     height: 95%;
     position: relative;
     
-   
+    
 }
 
 ul li a{
@@ -158,7 +134,7 @@ ul li a{
     justify-content: flex-start;
     text-decoration: none;
     padding: 12px 15px;
-    margin: 10px 0;
+    margin: 14px 0;
     gap: 20px;
     border-radius: 8px;
     transition: .5s;
@@ -175,8 +151,9 @@ ul li a:hover , .active{
     background-color: #ffffff55;
 }
 
+
 .menu ul li{
-    margin: 8px 0;
+    margin:  0;
 }
 
 .menu ul li a{
@@ -196,47 +173,32 @@ ul li a:hover , .active{
     visibility: visible;
 }
 
-
-.logout{
-    width: 90%;
-    height: 65px;
-
-    margin: auto;
-    margin-bottom: 20px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border-radius: 12px;
+.log-out{
+    margin-top:auto;
 }
+
 .log-out a{
     background-color: #ff0000;
 }
 
 
+/* محتوي الصفحة */
+
 .content{
-
     flex:1;
-
-    margin-right:120px;
-
+    margin-right:165px;   /* 160 + padding */
     padding:25px;
-
+    width:calc(100% - 200px);
+    box-sizing:border-box;
     transition:.4s;
-    
-
 }
 
 .menu:hover + .content{
-
-    margin-right:280px;
-
+    margin-right:300px;
+    width:calc(100% - 300px);
 }
 
-.menu:hover + .content{
-    margin-right:260px;
-}
+
 .title-info{
     background-color: #0481ff;
     padding: 10px;
@@ -278,6 +240,9 @@ ul li a:hover , .active{
 .data-info .box .data span{
     font-size: 30px;
 }
+
+
+/* الجداول */
 table{
     width: 100%;
     text-align: center;
@@ -295,6 +260,7 @@ th{
 td:hover{
     background-color: #ffffff55;
 }
+
 .price, .count{
     padding: 6px;
     border-radius: 6px;
@@ -311,92 +277,7 @@ td:hover{
 
 /* صفحة signup */
 
-
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
-
-body {
-  direction: rtl;
-  font-family: 'Cairo', sans-serif;
-  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
-  /* background-color: #001; */
-  /* background: url('/images/behira3.jpg'); */
-
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-}
-
-/* خلفية انشاء الحساب */
-
-.signup-wrapper {
-  background: url('/images/behira.jpg');
-  background-size: 100% 100%;
-  background-position: center 30%;
-  background-repeat: no-repeat;
-  
-  min-height: 100vh;  /*  - بتخلي الخلفية تملى الشاشة */
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-}
-
-
 /* خلفية صفحة تسجيل الدخول */
-.signin-wrapper {
-  background: url('/images/beheiraGov3.png'); /* حطي صورة تانية هنا */
-  background-size: 100% 100%;
-  background-position: center 30%;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-}
-
-/* تنسيق لون كتابة ال placeholder */
-
-.signin-wrapper input::placeholder {
-  color: #0D47A1 !important;
-  opacity: 1 !important;
-}
-
-.signin-wrapper input::-webkit-input-placeholder {
-  color: #0D47A1 !important;
-  opacity: 1 !important;
-}
-
-.signin-wrapper input::-moz-placeholder {
-  color: #0D47A1 !important;
-  opacity: 1 !important;
-}
-
-/* وده للـ select */
-.signin-wrapper select {
-  color: #0D47A1 !important;
-}
-
-/* لما يختار من الـ select اللون يرجع اسود للاختيارات */
-.signin-wrapper select option {
-  color: #000 !important;
-}
-
-.signin-wrapper select option[value=""] {
-  color: #0D47A1 !important;
-}
-
-
-
-
 
 /* الكارد الرئيسي */
 .col-4.offset-4 {
@@ -502,7 +383,6 @@ body {
   box-shadow: 0 0 10px 100px #667eea inset;
 }
 
- /* صفحة وصف المشكلة */
 
 
 /* ستايل لكل الفورم كنترول */
@@ -521,7 +401,7 @@ select.form-control {
   opacity: 1;
 }
 
-/* لما تعملي focus */
+/*لما تعمل focus */
 .form-control:focus, 
 select.form-control:focus {
   background: rgba(255, 255, 255, 0.25) !important;
@@ -762,20 +642,6 @@ textarea.form-control {
     cursor:pointer;
 }
 
-/* اسم المستخدم واسم مجموعة العمل في ال sidebar */
-/* .profile h2{
-    color:#fff;
-    font-size:18px;
-    margin-top:10px;
-    margin-bottom:3px;
-}
-
-.user-role{
-    color:#d6d6d6;
-    font-size:13px;
-    margin:0;
-} */
-
 
 /* // .البحث برقم المعاملة */
 .search-container{
@@ -867,3 +733,33 @@ textarea.form-control {
     background:#157347;
 
 }
+
+
+/* تغيير كلمة المرور */
+
+.change-password{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+
+    color:#4f8cff;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:600;
+
+    margin:-25px 0;
+}
+
+.change-password:hover{
+    color:#6ca4ff;
+}
+
+
+
+.change-password span{
+    white-space: nowrap;
+}
+
+
+

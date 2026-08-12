@@ -5,7 +5,7 @@ const technicalNoteSchema = require('../models/technicalNoteSchema')
 
 
 // راوتر عرض الصفحه
-router.get('/', auth.isLoggedIn, (req, res, next)=>{
+router.get('/', auth.isLoggedIn, auth.isActive,  (req, res, next)=>{
 
    const page = parseInt(req.query.page) || 1
     const limit = 10;
@@ -171,7 +171,7 @@ router.put('/editNote/:id', auth.isLoggedIn, auth.isAdmin, (req, res, next) => {
 
 router.delete('/deleteNote/:id', auth.isLoggedIn, auth.isAdmin, (req, res, next) => {
 
-    technicalNoteSchema.findByIdAndUpdate( req.params.id)
+    technicalNoteSchema.findByIdAndDelete( req.params.id)
 
     .then(note => {
 
@@ -211,8 +211,6 @@ router.delete('/deleteNote/:id', auth.isLoggedIn, auth.isAdmin, (req, res, next)
     });
 
 });
-
-
 
 
 

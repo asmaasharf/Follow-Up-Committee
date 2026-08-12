@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const inquirySchema = mongoose.Schema({
+const inquirySchema = new mongoose.Schema({
 
     createdBy: {
 
@@ -26,7 +26,9 @@ const inquirySchema = mongoose.Schema({
 
         type: String,
 
-        default: ''
+        default: '',
+
+          trim: true
 
     },
 

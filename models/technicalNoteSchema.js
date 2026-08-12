@@ -6,7 +6,9 @@ const technicalNoteSchema = new mongoose.Schema({
 
         type: String,
 
-        required: true
+        required: true,
+
+        trim: true
 
     },
 
@@ -14,7 +16,9 @@ const technicalNoteSchema = new mongoose.Schema({
 
         type: String,
 
-        required: true
+        required: true,
+
+        trim: true
 
     },
 

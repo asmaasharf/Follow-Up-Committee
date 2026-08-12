@@ -3,7 +3,7 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="5.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>document</title>
 
@@ -254,10 +254,6 @@
 
         </div>
 
-        <div id="currentFileName"
-             style="margin-top:6px;color:#198754;font-size:14px;font-weight:600;">
-        </div>
-
     </div>
 
     <!-- مرفق الرد -->
@@ -308,10 +304,6 @@
 
     </div>
 
-    <div
-        id="currentAdminFileName"
-        style="margin-top:6px;color:#198754;font-size:14px;font-weight:600;">
-    </div>
 
 </div>
 
@@ -502,7 +494,7 @@
                 </tr>
                 {{else}}
                 <tr>
-                    <td colspan="6">لا توجد بيانات</td>
+                    <td colspan="8">لا توجد بيانات</td>
                 </tr>
                 {{/each}}
                
@@ -550,34 +542,39 @@ formData.append('servicecode', this.servicecode.value);
 formData.append('problemdescription', this.problemdescription.value);
 formData.append('requiredaction', this.requiredaction.value);
 
-formData.append(
-    'image',
-    document.querySelector('input[type="file"]').files[0]
-);
+const image = document.getElementById("image").files[0];
+
+if (image) {
+    formData.append("image", image);
+}
 
     try {
-        const res = await fetch('/users/submit-form', {
-            method: 'POST',
-            body: formData
-            //headers: {'Content-Type': 'application/json'},
-            //body: JSON.stringify(data)
-        });
 
+    const res = await fetch('/users/submit-form', {
+        method: 'POST',
+        body: formData
+    });
 
-        const result = await res.json(); // هنستقبل JSON فعلاً
-        
-        if(res.ok && result.success) {
+    const result = await res.json();
 
-          // تنسيق التاريخ
-            const createdDate = new Date(result.form.createdAt);
+    // لو السيرفر رجع خطأ
+    if (!res.ok || !result.success) {
 
-            const date =
-             createdDate.getDate() + "-" +
-             (createdDate.getMonth() + 1) + "-" +
-             createdDate.getFullYear();
+        alert(result.message);
 
+        return;
 
-              const tbody = document.querySelector("table tbody");
+    }
+
+    // تنسيق التاريخ
+    const createdDate = new Date(result.form.createdAt);
+
+    const date =
+        createdDate.getDate() + "-" +
+        (createdDate.getMonth() + 1) + "-" +
+        createdDate.getFullYear();
+
+    const tbody = document.querySelector("table tbody");
 
     tbody.insertAdjacentHTML("afterbegin", `
         <tr>
@@ -603,17 +600,22 @@ formData.append(
             <td><span>تم</span></td>
         </tr>
     `);
-            alert('تم الحفظ بنجاح ✅');
-            //this.reset();
-            window.location.reload();
-            document.getElementById("fileButtons").style.display = "none"; "none";
-        } else {
-            alert('حدث خطأ: ' + result.message);
-        }
-    } catch (error) {
-        alert('يوجد مشكلة في الاتصال');
-        console.log(error);
-    }
+
+    alert("تم الحفظ بنجاح ✅");
+
+    // this.reset();
+
+    window.location.reload();
+
+    document.getElementById("fileButtons").style.display = "none";
+
+} catch (error) {
+
+    console.error(error);
+
+    alert("يوجد مشكلة في الاتصال بالخادم");
+
+}
 }
 
 //ارجاع البيانات للفورم بعد الضغط ع اختيار وظهور زر التعديل والحذف للمستخدم
@@ -926,16 +928,30 @@ if (image) {
     formData.append("image", image);
 }
 
-const res = await fetch(`/users/update-complaint/${id}`, {
-    method: "PUT",
-    body: formData
-});
+try {
 
-const result = await res.json();
+    const res = await fetch(`/users/update-complaint/${id}`, {
+        method: "PUT",
+        body: formData
+    });
 
-if (result.success) {
+    const result = await res.json();
 
-    alert("تم التعديل بنجاح");
+    console.log("Update response:", res.status, result);
+
+if (!res.ok || !result.success) {
+
+    alert(result.message || "غير مصرح لك بالتعديل");
+
+    // إرجاع الفورم للوضع الطبيعي
+    document.getElementById('btnCancel').click();
+
+    return;
+}
+
+
+    // لو التعديل تم بنجاح
+    alert(result.message || "تم التعديل بنجاح");
 
     isEditing = false;
 
@@ -947,11 +963,17 @@ if (result.success) {
 
     window.location.reload();
 
-} else {
 
-    alert(result.message);
+} catch (error) {
+
+    console.error("Update error:", error);
+
+    alert("حدث خطأ أثناء محاولة التعديل");
 
 }
+
+
+
 }
 // زرار الحذف
 document.getElementById('btnDelete').onclick = async function() {
@@ -1111,7 +1133,8 @@ imageInput.addEventListener("change", function () {
 });
 
 
-// البحث برقم المعاملة 
+
+// البحث برقم المعاملة
 
 const btnSearch = document.getElementById("btnSearch");
 const searchInput = document.getElementById("searchInput");
@@ -1125,6 +1148,7 @@ btnSearch.addEventListener("click", function () {
         alert("من فضلك أدخل رقم المعاملة");
 
         return;
+
     }
 
     fetch(`/users/search?transactionnumber=${encodeURIComponent(transactionnumber)}`)
@@ -1140,73 +1164,157 @@ btnSearch.addEventListener("click", function () {
             alert(data.message);
 
             return;
+
         }
 
-const complaint = data.complaint;
-complaintsBody.innerHTML = "";
-const row = document.createElement("tr");
-row.innerHTML = `
-    <td>
-        <button
-            class="btn-select"
-            data-id="${complaint._id}"
-            data-city="${complaint.city}"
-            data-transaction="${complaint.transactionnumber}"
-            data-service="${complaint.servicecode}"
-            data-problem="${complaint.problemdescription}"
-            data-action="${complaint.requiredaction}"
-            data-image="${complaint.image || ""}"
-            data-adminattachment="${complaint.adminAttachment || ""}"
-            data-adminreply="${complaint.adminReply || ""}"
-            style="background:green; color:white; border:none; padding:5px 15px; border-radius:5px; cursor:pointer;">
-            اختيار
-        </button>
-    </td>
 
-    <td>${new Date(complaint.createdAt).toLocaleDateString("en-GB")}</td>
-    <td>${complaint.city}</td>
-    <td>${complaint.transactionnumber}</td>
-    <td>
-    ${
-        complaint.replyBy
-        ? `<span class="count">${complaint.replyBy.username}</span>`
-        : `<span class="count">لم يتم</span>`
-    }
-    </td>
-    <td>
-    ${
-        complaint.replyDate
-        ? new Date(complaint.replyDate).toLocaleDateString("en-GB")
-        : "-"
-    }
-    </td> 
+        // مسح النتائج القديمة
+        complaintsBody.innerHTML = "";
 
-    <td>
-    ${
-        complaint.status === "تم"
-        ? `<span style="color:green;font-weight:bold">تم</span>`
-        : `<span style="color:red;font-weight:bold">لم يتم</span>`
-    }
-    </td>
-`;
-        complaintsBody.appendChild(row);
+
+        // كل الشكاوى الخاصة بنفس رقم المعاملة
+        data.complaints.forEach((complaint, index) => {
+
+
+            // رقم القيد الخاص بنتيجة البحث
+            // يبدأ من 1 في كل عملية بحث
+            const registrationNumber = index + 1;
+
+
+            const row = document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <button
+                        class="btn-select"
+                        data-id="${complaint._id}"
+                        data-city="${complaint.city}"
+                        data-transaction="${complaint.transactionnumber}"
+                        data-service="${complaint.servicecode}"
+                        data-problem="${complaint.problemdescription}"
+                        data-action="${complaint.requiredaction}"
+                        data-image="${complaint.image || ""}"
+                        data-adminattachment="${complaint.adminAttachment || ""}"
+                        data-adminreply="${complaint.adminReply || ""}"
+
+                        style="
+                            background:green;
+                            color:white;
+                            border:none;
+                            padding:5px 15px;
+                            border-radius:5px;
+                            cursor:pointer;
+                        ">
+
+                        اختيار
+
+                    </button>
+
+                </td>
+
+
+                <!-- رقم القيد في نتيجة البحث -->
+                <td>${registrationNumber}</td>
+
+
+                <!-- التاريخ -->
+                <td>
+                    ${new Date(complaint.createdAt).toLocaleDateString("en-GB")}
+                </td>
+
+
+                <!-- اسم المركز -->
+                <td>
+                    ${complaint.city}
+                </td>
+
+
+                <!-- رقم المعاملة -->
+                <td>
+                    ${complaint.transactionnumber}
+                </td>
+
+
+                <!-- مسؤول الرد -->
+                <td>
+
+                    ${
+                        complaint.replyBy
+                        ? `<span class="count">${complaint.replyBy.username}</span>`
+                        : `<span class="count">لم يتم</span>`
+                    }
+
+                </td>
+
+
+                <!-- تاريخ الرد -->
+                <td>
+
+                    ${
+                        complaint.replyDate
+                        ? new Date(complaint.replyDate).toLocaleDateString("en-GB")
+                        : "-"
+                    }
+
+                </td>
+
+
+                <!-- حالة الرد -->
+                <td>
+
+                    ${
+                        complaint.status === "تم"
+
+                        ? `<span style="color:green;font-weight:bold">
+                                تم
+                           </span>`
+
+                        : `<span style="color:red;font-weight:bold">
+                                لم يتم
+                           </span>`
+                    }
+
+                </td>
+
+            `;
+
+
+            complaintsBody.appendChild(row);
+
+        });
+
+
+        // تفريغ خانة البحث
         searchInput.value = "";
-        // انزل للجدول
-    document.getElementById("complaintsTable").scrollIntoView({
-    behavior: "smooth"
-});
+
+
+        // النزول للجدول
+        document.getElementById("complaintsTable").scrollIntoView({
+
+            behavior: "smooth"
+
+        });
 
     })
 
-   .catch(err => {
 
-    console.error(err);
+    .catch(err => {
 
-    alert(err);
+        console.error(err);
+
+        alert("حدث خطأ أثناء البحث");
+
+    });
 
 });
 
-});
+
+  
+
+
 
 
 // زر عرض وتحميل للادمن 

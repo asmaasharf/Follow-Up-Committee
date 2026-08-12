@@ -1,4 +1,16 @@
-require('dotenv').config()
+const dotenv = require('dotenv')
+const envFile = 
+        process.env.NODE_ENV === 'production'
+        ? '.env.production'
+        : '.env.development';
+
+        dotenv.config({
+            path : envFile
+        });
+        console.log('Running Enviroment', process.env.NODE_ENV || 'development');
+        console.log('Using Env File', envFile);
+        
+        
 
 var createError = require('http-errors');
 var express = require('express');
@@ -9,15 +21,15 @@ const mongoose = require('mongoose')
 const {check, validationResult} = require('express-validator')
 const bcrypt = require('bcrypt')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')
 const hbs = require('hbs');
 const multer = require('multer');
 
-
+const connectDB = require('./config/database')
 
 // connected to database
-mongoose.connect(process.env.MONGO_URL)
-.then(()=>console.log('connected to database ......'))
-.catch(err => console.error('Error connected to database', err))
+connectDB()
+
 
 
 hbs.registerHelper('formatDate', function(date) {
@@ -63,6 +75,8 @@ var technicalNotesRouter = require('./routes/technicalNotes')
 
 var app = express();
 
+app.disable('x-powered-by')
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -76,8 +90,22 @@ app.use(cookieParser());
 app.use(session({
   secret : process.env.SESSION_SECRET,
   saveUninitialized : false,
-  resave : false
+  resave : false, 
+  rolling : true ,
+
+  store : MongoStore.create({
+    mongoUrl : process.env.MONGO_URL,
+    collectionName : 'sessions'
+  }),
+  
+  cookie : {
+    httpOnly : true,
+    secure : process.env.NODE_ENV === 'production',
+    sameSite : 'lax',
+    maxAge : 15 * 60 * 1000
+  }
 }))
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 

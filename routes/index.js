@@ -4,13 +4,25 @@ const formSchema = require('../models/formSchema')
 const multer = require('multer');
 const path = require('path');
 const auth = require('../middleware/auth');
+const uploadError = require('../middleware/uploadError');
 
 
 //حفظ الصور 
+
+const fs = require('fs');
+
+const uploadPath = process.env.UPLOAD_PATH || 'public/uploads';
+
+if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+}
+
 const storage = multer.diskStorage({
 
     destination: function(req, file, cb) {
-        cb(null, 'public/uploads');
+
+        cb(null, uploadPath);
+
     },
 
     filename: function(req, file, cb) {
@@ -20,16 +32,41 @@ const storage = multer.diskStorage({
             path.extname(file.originalname);
 
         cb(null, uniqueName);
+
     }
 
 });
 
-const upload = multer({ storage: storage });
+function fileFilter(req, file, cb){
+
+    const allowedType = [
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'application/pdf'
+    ]
+
+    if(allowedType.includes(file.mimetype)){
+        cb(null, true)
+    }
+    else{
+        cb(new Error('يسمح فقط برفع ملفات JPG أو PNG أو PDF'), false)
+    }
+}
+const upload = multer({
+    storage: storage, 
+
+    limits : {
+        fileSize : 5 * 1024 * 1024
+    },
+
+    fileFilter : fileFilter
+});
 
 
 /* GET home page. */
 
-router.get('/', auth.isLoggedIn, function(req, res, next) {
+router.get('/', auth.isLoggedIn,  auth.isActive, function(req, res, next) {
 
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
@@ -72,11 +109,9 @@ router.get('/', auth.isLoggedIn, function(req, res, next) {
 });
 
 
-router.post('/users/submit-form', upload.single('image'), (req, res, next)=>{
+router.post('/users/submit-form', auth.isLoggedIn, auth.isActive, upload.single('image'), uploadError, (req, res, next)=>{
 
-  
-  const newForm = new formSchema ({
-   
+    const newForm = new formSchema ({
     
     city : req.body.city,
     transactionnumber : req.body.transactionnumber,
@@ -109,82 +144,126 @@ newForm.save()
 
 
 // router update
-router.put('/users/update-complaint/:id',  upload.single('image'), (req, res, next) => {
+router.put('/users/update-complaint/:id',
+    auth.isLoggedIn,
+    auth.isActive,
+    upload.single('image'),
+    uploadError,
+    async (req, res, next) => {
 
-    formSchema.findById(req.params.id)
+        try {
 
-    .then(form => {
+            const form = await formSchema.findById(req.params.id);
 
-        if (!form) {
+            // الشكوى غير موجودة
+            if (!form) {
 
-            return res.status(404).json({
-                success: false,
-                message: 'المشكلة غير موجودة'
-            });
+                return res.status(404).json({
+                    success: false,
+                    message: 'رقم المعاملة غير موجود'
+                });
 
-        }
+            }
 
-        // لو فيه رد من الأدمن امنع التعديل
-        if (form.adminReply && form.adminReply.trim() !== '') {
+
+            // منع تعديل الشكوى من مستخدم آخر
+            if (
+                form.createdBy &&
+                form.createdBy.toString() !== req.session.user._id.toString() &&
+                req.session.user.role.roleName !== 'Admin'
+            ) {
+
+                return res.status(403).json({
+                    success: false,
+                    message: 'غير مصرح لك بالتعديل'
+                });
+
+            }
+
+
+            // لو فيه رد من الأدمن امنع التعديل
+            if (
+                form.adminReply &&
+                form.adminReply.trim() !== ''
+            ) {
+
+                return res.status(403).json({
+                    success: false,
+                    message: 'لا يمكنك تعديل المشكلة بعد رد المسؤول'
+                });
+
+            }
+
+
+            const updateData = {
+
+                city: req.body.city,
+
+                transactionnumber: req.body.transactionnumber,
+
+                servicecode: req.body.servicecode,
+
+                problemdescription: req.body.problemdescription,
+
+                requiredaction: req.body.requiredaction
+
+            };
+
+
+            // لو المستخدم اختار صورة جديدة
+            if (req.file) {
+
+                updateData.image = req.file.filename;
+
+            }
+
+
+            const updatedForm = await formSchema.findByIdAndUpdate(
+                req.params.id,
+                updateData,
+                { new: true }
+            );
+
+
+            if (!updatedForm) {
+
+                return res.status(404).json({
+                    success: false,
+                    message: 'تعذر تحديث المشكلة'
+                });
+
+            }
+
 
             return res.json({
+
+                success: true,
+
+                message: 'تم التعديل بنجاح'
+
+            });
+
+
+        } catch (err) {
+
+            console.log(err);
+
+            return res.status(500).json({
+
                 success: false,
-                message: 'لا يمكنك تعديل المشكلة بعد رد المسؤول'
+
+                message: 'حدث خطأ أثناء التعديل'
+
             });
 
         }
 
-
-         const updateData = {
-            city: req.body.city,
-            transactionnumber: req.body.transactionnumber,
-            servicecode: req.body.servicecode,
-            problemdescription: req.body.problemdescription,
-            requiredaction: req.body.requiredaction
-        };
-
-        // اختيار صورة جديدة
-
-        if(req.file){
-            updateData.image = req.file.filename;
-        }
-
-        return formSchema.findByIdAndUpdate(
-            req.params.id,
-            updateData,
-            { new: true }
-        );
-
-    })
-
-    .then(doc => {
-
-        if (!doc) return;
-
-        res.json({
-            success: true,
-            message: 'تم التعديل بنجاح'
-        });
-
-    })
-
-    .catch(err => {
-
-        console.log(err);
-
-        res.status(500).json({
-            success: false,
-            message: 'حدث خطأ أثناء التعديل'
-        });
-
-    });
-
-});
-
+    }
+);
 
 
 // router delete
-router.delete('/users/delete-complaint/:id', (req, res, next) => {
+router.delete('/users/delete-complaint/:id', auth.isLoggedIn, auth.isActive, (req, res, next) => {
 
     formSchema.findById(req.params.id)
 
@@ -194,10 +273,23 @@ router.delete('/users/delete-complaint/:id', (req, res, next) => {
 
             return res.status(404).json({
                 success: false,
-                message: 'المشكلة غير موجودة'
+                message: 'رقم المعاملة غير موجود'
             });
 
         }
+
+        // منع المستخدم من الحذف اي مشكلة لمستخدم اخر
+
+        if (
+            form.createdBy &&
+            form.createdBy.toString() !== req.session.user._id.toString() &&
+            req.session.user.role.roleName !== "Admin"
+            ) {
+                return res.status(403).json({
+                success: false,
+                message: "غير مصرح لك بالحذف"
+           });
+           }
 
         // لو الأدمن رد، امنع الحذف
         if (form.adminReply && form.adminReply.trim() !== '') {
@@ -240,7 +332,7 @@ router.delete('/users/delete-complaint/:id', (req, res, next) => {
 
 // راوتر حفظ الرد للادمن 
 
-router.put('/users/reply-complaint/:id', auth.isLoggedIn, auth.isAdmin, upload.single('adminAttachment'), (req, res, next) => {
+router.put('/users/reply-complaint/:id', auth.isLoggedIn,  auth.isActive, auth.isAdmin, upload.single('adminAttachment'), (req, res, next) => {
 
     formSchema.findById(req.params.id)
 
@@ -250,7 +342,7 @@ router.put('/users/reply-complaint/:id', auth.isLoggedIn, auth.isAdmin, upload.s
 
             return res.json({
                 success: false,
-                message: 'الشكوى غير موجودة'
+                message: 'رقم لمعاملة غير موجود'
             });
 
         }
@@ -300,37 +392,76 @@ router.put('/users/reply-complaint/:id', auth.isLoggedIn, auth.isAdmin, upload.s
 
 // رواتر البحث 
 
-router.get('/users/search', (req, res, next)=> {
+router.get('/users/search', auth.isLoggedIn, auth.isActive, async (req, res) => {
 
-    const transactionnumber = req.query.transactionnumber;
+    try {
 
-    formSchema.findOne({ transactionnumber: transactionnumber }).populate("replyBy")
+        const transactionnumber = req.query.transactionnumber;
 
-    .then(complaint=>{
+        let complaints = await formSchema
+            .find({ transactionnumber: transactionnumber })
+            .populate("replyBy")
+            .sort({ createdAt: 1 });
 
-        if (!complaint) {
+
+        // لو مفيش أي شكاوى
+        if (!complaints || complaints.length === 0) {
 
             return res.json({
-
                 success: false,
-
                 message: "رقم المعاملة غير موجود"
+            });
+
+        }
+
+
+        // لو المستخدم مش Admin
+        // يظهر له فقط الشكاوى الخاصة به
+        if (req.session.user.role.roleName !== "Admin") {
+
+            complaints = complaints.filter(complaint => {
+
+                // لو الشكوى مرتبطة بمستخدم
+                if (complaint.createdBy) {
+
+                    return complaint.createdBy.toString() ===
+                           req.session.user._id.toString();
+
+                }
+
+                // نحافظ على السلوك القديم للبيانات
+                // التي ليس لها createdBy
+                return true;
 
             });
 
         }
 
+
+        // بعد الفلترة ممكن ميبقاش فيه نتائج
+        if (complaints.length === 0) {
+
+            return res.json({
+
+                success: false,
+
+                message: "غير مصرح لك بعرض هذه الشكاوى"
+
+            });
+
+        }
+
+
         res.json({
 
             success: true,
 
-            complaint: complaint
+            complaints: complaints
 
         });
 
-    })
 
-    .catch(function(err) {
+    } catch (err) {
 
         console.log(err);
 
@@ -342,7 +473,7 @@ router.get('/users/search', (req, res, next)=> {
 
         });
 
-    });
+    }
 
 });
 
