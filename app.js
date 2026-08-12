@@ -75,7 +75,9 @@ var technicalNotesRouter = require('./routes/technicalNotes')
 
 var app = express();
 
-app.disable('x-powered-by')
+app.disable('x-powered-by');
+
+app.set('trust proxy', 1);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
