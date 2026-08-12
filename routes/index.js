@@ -116,9 +116,6 @@ router.post('/users/submit-form',
     uploadError, 
     (req, res, next)=>{
 
-        console.log("UPLOAD PATH:", uploadPath);
-console.log("FILE:", req.file);
-
     const newForm = new formSchema ({
     
     city : req.body.city,

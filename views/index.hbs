@@ -185,12 +185,7 @@
     </div>
     </div>
 
-        {{!-- رقم القيد
-     <div class="col-md-3">
-            <div class="form-group mb-4">
-                <input type="text" id="registrationnumber"  name="registrationnumber"  placeholder="رقم القيد" class="form-control" >
-            </div>
-        </div> --}}
+    
 
         {{!-- رقم المعاملة --}}
         <div class="col-md-4">
@@ -416,7 +411,6 @@
             <thead>
                 <tr>
                     <th>الإجراءات</th>
-                    <th>رقم القيد</th>
                     <th>التاريخ</th>
                     <th>اسم المركز</th>
                     <th>رقم المعاملة</th>
@@ -444,7 +438,7 @@
                         >اختيار</button>
 
                         </td>
-                    <td>{{serialNumber @index ../currentPage 10}}</td>
+                    {{!-- <td>{{serialNumber @index ../currentPage 10}}</td> --}}
                     <td>{{formatDate this.createdAt}}</td>
                     <td>{{this.city}}</td>
                     <td><span class="price">{{this.transactionnumber}}</span></td>
@@ -1216,8 +1210,6 @@ btnSearch.addEventListener("click", function () {
                 </td>
 
 
-                <!-- رقم القيد في نتيجة البحث -->
-                <td>${registrationNumber}</td>
 
 
                 <!-- التاريخ -->
