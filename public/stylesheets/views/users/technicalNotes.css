@@ -388,3 +388,85 @@
 }
 
 
+/* =========================================
+   Responsive - Technical Notes - Mobile
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* مساحة الصفحة على الموبايل */
+    .content-technicalNotes {
+        margin: 10px 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* عنوان الصفحة والمحتوى */
+    .content-title-info {
+        margin-right: 0 !important;
+        padding: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* عنوان الصفحة */
+    .page-header h2 {
+        font-size: 24px !important;
+    }
+
+    .page-header p {
+        font-size: 14px !important;
+    }
+
+    /* حاوية الجدول */
+    .table-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+
+        max-height: 600px !important;
+    }
+
+    /* الجدول نفسه */
+    .technicalNotes-table {
+        width: 100% !important;
+        min-width: 700px !important;
+    }
+
+    /* حجم الخط على الموبايل */
+    .technicalNotes-table th {
+        font-size: 14px !important;
+        padding: 10px 6px !important;
+    }
+
+    .technicalNotes-table td {
+        font-size: 13px !important;
+        padding: 10px 6px !important;
+    }
+
+    /* أزرار التعديل والحذف */
+    .edit-btn,
+    .delete-btn {
+        min-width: 55px !important;
+        font-size: 12px !important;
+        padding: 5px !important;
+    }
+
+    /* أيقونة عرض النص */
+    .btn-view-text {
+        margin-right: 0 !important;
+    }
+
+    /* Pagination */
+    .pagination {
+        padding: 10px !important;
+        gap: 8px !important;
+    }
+
+    .page-number {
+        font-size: 14px !important;
+    }
+}
+

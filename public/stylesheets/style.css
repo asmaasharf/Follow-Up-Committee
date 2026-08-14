@@ -365,17 +365,51 @@ td:hover{
   }
 }
 
-@media (max-width: 768px) { 
-    .menu { 
-        position: absolute !important;
+/* =========================
+   Responsive للموبايل فقط
+   ========================= */
+@media (max-width: 768px) {
+
+    /* Sidebar */
+    .menu {
+        position: fixed !important;
         top: 0 !important;
-        height: auto !important;
+        right: 0 !important;
+        width: 65px !important;
+        height: 100vh !important;
         min-height: 100vh !important;
+        padding: 15px 5px !important;
     }
 
-    .content { 
-        min-height: 100vh;
-    } 
+    /* ممنوع يكبر بالـ hover على الموبايل */
+    .menu:hover {
+        width: 65px !important;
+    }
+
+    /* إخفاء أسماء القوائم على الموبايل */
+    .menu ul li a p {
+        display: none !important;
+    }
+
+    /* المحتوى ياخد باقي عرض الشاشة */
+    .content {
+        margin-right: 65px !important;
+        width: calc(100% - 65px) !important;
+        min-height: 100vh !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* أي جدول */
+    table {
+        max-width: 100% !important;
+    }
+
+    /* الحاويات */
+    .table-container {
+        max-width: 100% !important;
+        overflow-x: auto !important;
+    }
 }
 
 
