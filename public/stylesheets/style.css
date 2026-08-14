@@ -410,6 +410,34 @@ td:hover{
         max-width: 100% !important;
         overflow-x: auto !important;
     }
+
+        /* تحسين شكل الـ Sidebar على الموبايل */
+    .profile {
+        padding-top: 10px !important;
+    }
+
+    .img-box {
+        width: 50px !important;
+        height: 50px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .user-role,
+    .change-password,
+    .full-name {
+        display: none !important;
+    }
+
+    .menu ul li a {
+        justify-content: center !important;
+        padding: 10px 5px !important;
+        margin: 10px 0 !important;
+    }
+
+    .menu ul li a i {
+        font-size: 24px !important;
+        width: auto !important;
+    }
 }
 
 
