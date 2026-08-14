@@ -365,16 +365,17 @@ td:hover{
   }
 }
 
-@media (max-width: 768px) {
-    .menu {
+@media (max-width: 768px) { 
+    .menu { 
         position: absolute !important;
-        height: 100vh !important;
+        top: 0 !important;
+        height: auto !important;
         min-height: 100vh !important;
     }
 
-    .content {
+    .content { 
         min-height: 100vh;
-    }
+    } 
 }
 
 
