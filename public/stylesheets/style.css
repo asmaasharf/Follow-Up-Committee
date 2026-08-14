@@ -365,6 +365,18 @@ td:hover{
   }
 }
 
+@media (max-width: 768px) {
+    .menu {
+        position: absolute !important;
+        height: 100vh !important;
+        min-height: 100vh !important;
+    }
+
+    .content {
+        min-height: 100vh;
+    }
+}
+
 
 
 /* ده المهم: لون القائمة لما تفتح */
